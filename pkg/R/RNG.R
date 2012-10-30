@@ -18,24 +18,7 @@
 # Creation: 08 Nov 2011
 ###############################################################################
 
-#' RNG Settings
-#' 
-#' The functions documented here provide a unified interface to work with 
-#' RNG settings.
-#' 
-#' @rdname rng
-#' @name RNG-NMF
-NULL
-
-#' \code{RNGrecovery} allows to recover from a broken state of \code{.Random.seed}.
-#' 
-#' @export
-#' @rdname rng
-RNGrecovery <- function(){
-	s <- as.integer(c(401,0,0))
-	assign(".Random.seed", s, envir=.GlobalEnv)
-	RNGkind("default")
-}
+library(pkgmaker)
 
 ###% Returns all the libraries that provides a user-supplied RNG
 ###% 
@@ -119,109 +102,84 @@ RNGlib <- function(PACKAGE='', full=FALSE, hook="user_unif_rand", ...){
 ###% at loading time as 'base' if core RNGs were in use or as the package that was 
 ###% providing the RNG hook 'user_unif_rand' if the RNG in used was "user-supplied".       
 ###%
-RNGprovider <- function(user.supplied=FALSE){
+RNGprovider <- function(kind=RNGkind(), user.supplied=FALSE){
 	
-	kind <- RNGkind()
-	if( kind[1] == 'user-supplied' || user.supplied ) RNGlib()		
+	if( kind[1L] == 'user-supplied' || user.supplied ) RNGlib()		
 	else 'base'
 }
 
-RNGscope <- function(seed){
+#' Directly Getting or Setting the RNG Seed
+#' 
+#' \code{RNGseed} directly gets/sets the current RNG seed \code{.Random.seed}.
+#' It can typically be used to backup and restore the RNG state on exit of 
+#' functions, enabling local RNG changes.
+#' 
+#' @param seed an RNG seed, i.e. an integer vector.
+#' No validity check is performed, so it \strong{must} be a 
+#' valid seed.
+#' 
+#' @return invisibly the current RNG seed when called with no arguments,
+#' or the -- old -- value of the seed before changing it to 
+#' \code{seed}. 
+#' 
+#' @export
+#' @examples
+#' 
+#' # get current seed
+#' RNGseed()
+#' # directly set seed
+#' old <- RNGseed(c(401L, 1L, 1L))
+#' # show old/new seed description
+#' showRNG(old)
+#' showRNG()
+#' 
+#' # set bad seed
+#' RNGseed(2:3)
+#' try( showRNG() )
+#' # recover from bad state
+#' RNGrecovery()
+#' showRNG()
+#' 
+#' # example of backup/restore of RNG in functions
+#' f <- function(){
+#' 	orng <- RNGseed()
+#'  on.exit(RNGseed(orng))
+#' 	RNGkind('Marsaglia')
+#' 	runif(10)
+#' }
+#' 
+#' sample(NA)
+#' s <- .Random.seed
+#' f()
+#' identical(s, .Random.seed)
+#' \dontshow{ stopifnot(identical(s, .Random.seed)) }
+#' 
+RNGseed <- function(seed){
 	
 	res <- if( missing(seed) ){
-				if( exists('.Random.seed', where = .GlobalEnv) )
-					get('.Random.seed', .GlobalEnv)
-			}else if( is.null(seed) ){
-				if( exists('.Random.seed', where = .GlobalEnv) )
-					rm('.Random.seed', envir = .GlobalEnv)
-			}else{
-				old <- RNGscope()
-				assign('.Random.seed', seed, .GlobalEnv)
-				old
-			}
+		if( exists('.Random.seed', where = .GlobalEnv) )
+			get('.Random.seed', envir = .GlobalEnv)
+	}else if( is.null(seed) ){
+		if( exists('.Random.seed', where = .GlobalEnv) )
+			rm('.Random.seed', envir = .GlobalEnv)
+	}else{
+		old <- RNGseed()
+		assign('.Random.seed', seed, envir = .GlobalEnv)
+		old
+	}
 	invisible(res)
 }
 
-###% Returns a single string that describes the given RNG state
-###% 
-RNGdesc <- function(seed){
-	
-	if( missing(seed) ){
-		rp <- RNGprovider()
-		rs <- getRNG()
-		if( rp == 'base' || length(rs) > 1L )
-			seed <- rs
-		else 
-			return( "Unknown" )		
-	}
-	
-	if( is.null(seed) ) 'NULL'
-	else if( is.numeric(seed) ){
-		if( length(seed) > 7L )
-			paste(str_out(seed, 3),  str_c('[', digest(seed), ']'))
-		else 
-			str_out(seed, Inf)
-	}
-	else
-		paste(class(seed), ' [', digest(seed), ']', sep='')
-}
-
-#' \code{RNGtype} extract the kinds of RNG and Normal RNG.
-#'  
-#' \code{RNGtype} returns the same type of values as \code{RNGkind()}, except that 
-#' it can extract the RNG settings from an object.
-#' If \code{object} is missing it returns the kinds of the current RNG settings, 
-#' i.e. it is identical to \code{RNGkind()}.
+#' \code{RNGrecovery} recovers from a broken state of \code{.Random.seed}, 
+#' and reset the RNG settings to defaults.
 #' 
 #' @export
-#' @rdname rng
-RNGtype <- function(object){
-	
-	if( missing(object) ){
-		RNGkind()
-	}else{
-		# extract RNG
-		object <- getRNG(object)
-		# get kind
-		kinds <- c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", 
-				"Mersenne-Twister", "Knuth-TAOCP", "user-supplied", "Knuth-TAOCP-2002", 
-				"L'Ecuyer-CMRG", "default")
-		K <- kinds[object[1L] %% 100 + 1L]
-		# get normal kind
-		n.kinds <- c("Buggy Kinderman-Ramage", "Ahrens-Dieter", "Box-Muller", 
-				"user-supplied", "Inversion", "Kinderman-Ramage", "default")
-		NK <- n.kinds[floor(object[1L]/100)+1L]
-		
-		# return both kinds
-		c(K, NK)
-	}
-	
+#' @rdname RNGseed
+RNGrecovery <- function(){
+	s <- as.integer(c(401,0,0))
+	assign(".Random.seed", s, envir=.GlobalEnv)
+	RNGkind("default", "default")
 }
-
-#' \code{RNGinfo} shows displays human readable information about RNG settings.
-#' If \code{object} is missing it displays information about the current RNG.
-#' 
-#' @param indent character string to use as indentation prefix in the output 
-#' from \code{RNGinfo}.
-#' 
-#' @export
-#' @rdname rng
-RNGinfo <- function(object=getRNG(), indent=''){
-	
-	# get kind
-	kind <- RNGtype(object)
-	# determine provider
-	prov <- RNGprovider()
-	prov <- 
-	if( prov == 'base')	kind[1L]
-	else paste('package:', prov, sep='')
-
-	# show information
-	cat(indent, "RNG kind: ", paste(kind, collapse=" / "), "\n")
-	cat(indent, "RNG state:", RNGdesc(object), "\n")
-
-} 
-
 
 .getRNGattribute <- function(object){
 	if( .hasSlot(object, 'rng') ) slot(object, 'rng')
@@ -229,27 +187,40 @@ RNGinfo <- function(object=getRNG(), indent=''){
 	else attr(object, 'rng')
 }
 
-#' RNG Settings
-#' 
-#' The functions documented here provide a unified interface to work with 
-#' RNG settings.
+#' Getting/Setting RNGs
 #' 
 #' \code{getRNG} returns the Random Number Generator (RNG) settings used for 
-#' computing an object, using a suitable \code{.getRNG} method to extract 
+#' computing an object, using a suitable \code{.getRNG} S4 method to extract 
 #' these settings.
-#' For example, in the case of results from multiple NMF runs, it returns the 
-#' RNG settings used to compute the best fit.
+#' For example, in the case of objects that result from multiple model fits, 
+#' it would return the RNG settings used to compute the best fit.
 #' 
 #' @param object an R object from which RNG settings can be extracted, e.g. an 
 #' integer vector containing a suitable value for \code{.Random.seed} or embedded 
-#' RNG data such objects returned by the function \code{\link{nmf}}.
-#' @param ... extra arguments to allow extension and passed to a suitable method \code{.getRNG}.
+#' RNG data, e.g., in S3/S4 slot \code{rng}.
+#' @param ... extra arguments to allow extension and passed to a suitable S4 method 
+#' \code{.getRNG} or \code{.setRNG}.
 #' 
-#' @return \code{getRNG} returns the RNG settings as a single integer vector as 
-#' \code{\link{.Random.seed}} or \code{NULL} if no RNG data was found.
+#' @return \code{getRNG}, \code{getRNG1}, \code{nextRNG} and \code{setRNG} 
+#' usually return an integer vector of length > 2L, like \code{\link{.Random.seed}}.
+#' 
+#' \code{getRNG} and \code{getRNG1} return \code{NULL} if no RNG data was found.
 #' 
 #' @rdname rng
+#' @seealso \code{\link{.Random.seed}}, \code{\link{showRNG}}
 #' @export
+#' 
+#' @examples
+#' # get current RNG settings
+#' s <- getRNG()
+#' head(s)
+#' showRNG(s)
+#' 
+#' # get RNG from a given single numeric seed
+#' s <- getRNG(1234)
+#' head(s)
+#' showRNG(s)
+#'  
 getRNG <- function(object, ...){
 	
 	if( missing(object) || is.null(object) ) return( .getRNG() )
@@ -268,23 +239,19 @@ getRNG <- function(object, ...){
 #' Its methods define the workhorse functions that are called by \code{getRNG}.
 #' 
 #' @rdname rng
+#' @inline
 #' @export
 setGeneric('.getRNG', function(object, ...) standardGeneric('.getRNG') )
 #' Returns the current RNG settings.
-#' 
-#' @examples 
-#' # get current RNG settings
-#' head(getRNG())
-#' 
 setMethod('.getRNG', 'missing',
 	function(object){
 		
 		# return current value of .Random.seed
 		# ensuring it exists first 
-		if( !exists('.Random.seed', .GlobalEnv) ) 
+		if( !exists('.Random.seed', envir = .GlobalEnv) ) 
 			sample(NA)
 		
-		return( get('.Random.seed', .GlobalEnv) )
+		return( get('.Random.seed', envir = .GlobalEnv) )
 		
 	}
 )
@@ -318,17 +285,15 @@ setMethod('.getRNG', 'list',
 #			object	
 #		}
 #)
-#' Methods for numeric vectors, which returns the object itself, if it has more than one 
+#' Method for numeric vectors, which returns the object itself, if it has more than one 
 #' element, coerced into an integer vector if necessary, as it is assumed to 
 #' already represent a value for \code{\link{.Random.seed}}.
 #' 
 #' Or if \code{object} has a single element, the value of \code{.Random.seed} as 
 #' it would be after calling \code{set.seed(object, ...)}
 #' In this case, all arguments in \code{...} are passed to \code{\link{set.seed}}.
-#'    
-#' @return \code{getRNG}, \code{getRNG1}, \code{nextRNG} and \code{setRNG} return 
-#' an integer vector of length greater than 3 (see \code{\link{.Random.seed}}.
-#'  
+#' Note that this does not change the current RNG.
+#' 
 setMethod('.getRNG', 'numeric',
 	function(object, ...){
 		as.integer(object)
@@ -337,8 +302,8 @@ setMethod('.getRNG', 'numeric',
 
 #' \code{getRNG1} is an S4 generic that returns the \strong{initial} RNG settings 
 #' used for computing an object.
-#' For example, in the case of results from multiple NMF runs, it returns the 
-#' RNG settings used to compute the \emph{first} fit.
+#' For example, in the case of results from multiple model fies, it would 
+#' return the RNG settings used to compute the \emph{first} fit.
 #' 
 #' \code{getRNG1} is defined to provide separate access to the RNG settings as 
 #' they were at the very beginning of a whole computation, which might differ 
@@ -346,13 +311,14 @@ setMethod('.getRNG', 'numeric',
 #' result only.
 #' 
 #' Think of a sequence of separate computations, from which only one result is 
-#' used for the result (e.g. the one that maximise a likelihood): 
+#' used for the result (e.g. the one that maximises a likelihood): 
 #' \code{getRNG1} would return the RNG settings to reproduce the complete sequence
 #' of computations, while \code{getRNG} would return the RNG settings necessary to 
 #' reproduce only the computation whose result has maximum likelihood.  
 #' 
 #' @rdname rng
 #' @export
+#' @inline
 #' 
 setGeneric('getRNG1', function(object, ...) standardGeneric('getRNG1') )
 #' Default method that is identical to \code{getRNG(object, ...)}.
@@ -362,17 +328,20 @@ setMethod('getRNG1', 'ANY',
 	}
 )
 
-
 #' \code{nextRNG} returns the RNG settings as they would be after seeding with 
-#' \code{seed}.
+#' \code{object}.
 #' 
 #' @rdname rng
 #' @export
+#' @examples 
+#' head(nextRNG())
+#' head(nextRNG(1234))
+#' 
 nextRNG <- function(object, ...){
 
 	# get/restore .Random.seed on.exit
-	orseed <- RNGscope()
-	on.exit(RNGscope(orseed))
+	orseed <- RNGseed()
+	on.exit(RNGseed(orseed))
 	
 	# return next state of current RNG if object is missing
 	if( missing(object) ){
@@ -395,7 +364,7 @@ nextRNG <- function(object, ...){
 	.setRNG(object, ...)
 	
 	# return new RNG settings
-	RNGscope()
+	RNGseed()
 }
 
 .collapse <- function(x, sep=', ', n){
@@ -406,15 +375,8 @@ nextRNG <- function(object, ...){
 	res
 }
 
-.showRNG <- function(...){	
-	message(paste(capture.output( RNGinfo(..., indent="#") ), collapse="\n"))	
-}
-
-RNGshow <- .showRNG
-
-#' \code{setRNG} tries to extract RNG settings from \code{object}, using a 
-#' suitable \code{.setRNG} method to set these settings.
-#' All arguments are passed to the next call to \code{.setRNG}.
+#' \code{setRNG} set the current RNG with a seed, 
+#' using a suitable \code{.setRNG} method to set these settings.
 #'
 #' @return \code{setRNG} invisibly returns the old RNG settings as 
 #' they were before changing them.
@@ -423,7 +385,7 @@ RNGshow <- .showRNG
 #' @rdname rng
 #' @examples 
 #' 
-#' obj <- list(x=10, rng=123)
+#' obj <- list(x=1000, rng=123)
 #' setRNG(obj)
 #' rng <- getRNG()
 #' runif(10)
@@ -443,7 +405,7 @@ setRNG <- function(object, ..., verbose=FALSE){
 	orseed <- getRNG()
 	on.exit({
 		message("Restoring RNG settings probably due to an error in setRNG")
-		RNGscope(orseed) 
+		RNGseed(orseed) 
 	})
 
 	# call S4 method on object
@@ -451,7 +413,7 @@ setRNG <- function(object, ..., verbose=FALSE){
 	
 	# cancel RNG restoration
 	on.exit()
-	if( verbose ) .showRNG()			
+	if( verbose ) showRNG()			
 	
 	invisible(orseed)
 }
@@ -478,7 +440,10 @@ setGeneric('.setRNG', function(object, ...) standardGeneric('.setRNG') )
 #' setRNG(old)
 setMethod('.setRNG', 'character',
 	function(object, ...){
-		RNGkind(kind=object, ...)
+		if( length(object) == 1L )
+			RNGkind(kind=object, ...)
+		else
+			RNGkind(kind=object[1L], normal.kind=object[2L])
 	}
 )
 
@@ -521,24 +486,39 @@ setMethod('.setRNG', 'numeric',
 )
 
 #' \code{RNGdigest} computes a hash from the RNG settings associated with an 
-#' object. 
+#' object.
 #' 
-#' @rdname rng
+#' @rdname RNGstr
 #' @export
-RNGdigest <- function(x){
+#' 
+#' @examples 
+#' # compute digest hash from RNG settings
+#' RNGdigest()
+#' RNGdigest(1234)
+#' # no validity check is performed
+#' RNGdigest(2:3)
+#' 
+RNGdigest <- function(object=getRNG()){
 	
-	object <- if( missing(x) )	getRNG() else getRNG(x)
+	x <- object
+	object <- getRNG(x)
 	
 	# exit if no RNG was extracted
-	if( is.null(object) )
+	if( is.null(object) ){
+		warning("Found no embedded RNG data in object [", class(x),"]: returned NULL digest [", digest(NULL), '].')
 		return(digest(NULL)) # TODO: return NULL
+	}
 		
 	digest(object)
 	
 }
 
-#' \code{rng.equal} and \code{rng1.equal} return \code{TRUE} the RNG settings 
-#' associated with two objects are identical, and \code{FALSE} otherwise. 
+#' Comparing RNG Settings
+#' 
+#' \code{rng.equal} compares the RNG settings associated with two objects.
+#' 
+#' These functions return \code{TRUE} if the RNG settings are identical, 
+#' and \code{FALSE} otherwise. 
 #' The comparison is made between the hashes returned by \code{RNGdigest}.
 #' 
 #' @param x objects from which RNG settings are extracted
@@ -547,7 +527,7 @@ RNGdigest <- function(x){
 #' @return \code{rng.equal} and \code{rng.equal1} return a \code{TRUE} or 
 #' \code{FALSE}.
 #' 
-#' @rdname rng
+#' @rdname rngcmp
 #' @export
 rng.equal <- function(x, y){
 	if( missing(y) )
@@ -555,10 +535,10 @@ rng.equal <- function(x, y){
 	identical(RNGdigest(x), RNGdigest(y))
 }
 
-#' The function \code{rng1.equal} tests whether two objects have identical 
+#' \code{rng1.equal} tests whether two objects have identical 
 #' \strong{initial} RNG settings.
 #' 
-#' @rdname rng
+#' @rdname rngcmp
 #' @export
 rng1.equal <- function(x, y){
 	if( missing(y) )

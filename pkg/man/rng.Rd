@@ -1,36 +1,23 @@
 \docType{methods}
-\name{RNG-NMF}
-\alias{.getRNG}
-\alias{.getRNG,ANY-method}
-\alias{.getRNG,list-method}
-\alias{.getRNG,missing-method}
-\alias{.getRNG,numeric-method}
-\alias{.getRNG-methods}
-\alias{.setRNG}
-\alias{.setRNG,character-method}
-\alias{.setRNG,numeric-method}
-\alias{.setRNG-methods}
-\alias{RNG-NMF}
-\alias{RNGdigest}
-\alias{RNGinfo}
-\alias{RNGrecovery}
-\alias{RNGtype}
+\name{getRNG}
 \alias{getRNG}
+\alias{.getRNG}
 \alias{getRNG1}
 \alias{getRNG1,ANY-method}
 \alias{getRNG1-methods}
+\alias{.getRNG,ANY-method}
+\alias{.getRNG,list-method}
+\alias{.getRNG-methods}
+\alias{.getRNG,missing-method}
+\alias{.getRNG,numeric-method}
 \alias{nextRNG}
-\alias{rng.equal}
-\alias{rng1.equal}
 \alias{setRNG}
-\title{RNG Settings}
+\alias{.setRNG}
+\alias{.setRNG,character-method}
+\alias{.setRNG-methods}
+\alias{.setRNG,numeric-method}
+\title{Getting/Setting RNGs}
 \usage{
-  RNGrecovery()
-
-  RNGtype(object)
-
-  RNGinfo(object = getRNG(), indent = "")
-
   getRNG(object, ...)
 
   .getRNG(object, ...)
@@ -42,66 +29,38 @@
   setRNG(object, ..., verbose = FALSE)
 
   .setRNG(object, ...)
-
-  RNGdigest(x)
-
-  rng.equal(x, y)
-
-  rng1.equal(x, y)
 }
 \arguments{
-  \item{indent}{character string to use as indentation
-  prefix in the output from \code{RNGinfo}.}
-
   \item{object}{an R object from which RNG settings can be
   extracted, e.g. an integer vector containing a suitable
-  value for \code{.Random.seed} or embedded RNG data such
-  objects returned by the function \code{\link{nmf}}.}
+  value for \code{.Random.seed} or embedded RNG data, e.g.,
+  in S3/S4 slot \code{rng}.}
 
   \item{...}{extra arguments to allow extension and passed
-  to a suitable method \code{.getRNG}.}
+  to a suitable S4 method \code{.getRNG} or
+  \code{.setRNG}.}
 
   \item{verbose}{a logical that indicates if the new RNG
   settings should be displayed.}
-
-  \item{x}{objects from which RNG settings are extracted}
-
-  \item{y}{object from which RNG settings are extracted}
 }
 \value{
-  \code{getRNG} returns the RNG settings as a single
-  integer vector as \code{\link{.Random.seed}} or
-  \code{NULL} if no RNG data was found.
-
   \code{getRNG}, \code{getRNG1}, \code{nextRNG} and
-  \code{setRNG} return an integer vector of length greater
-  than 3 (see \code{\link{.Random.seed}}.
+  \code{setRNG} usually return an integer vector of length
+  > 2L, like \code{\link{.Random.seed}}.
+
+  \code{getRNG} and \code{getRNG1} return \code{NULL} if no
+  RNG data was found.
 
   \code{setRNG} invisibly returns the old RNG settings as
   they were before changing them.
-
-  \code{rng.equal} and \code{rng.equal1} return a
-  \code{TRUE} or \code{FALSE}.
 }
 \description{
-  The functions documented here provide a unified interface
-  to work with RNG settings.
-
-  \code{RNGrecovery} allows to recover from a broken state
-  of \code{.Random.seed}.
-
-  \code{RNGtype} returns the same type of values as
-  \code{RNGkind()}, except that it can extract the RNG
-  settings from an object. If \code{object} is missing it
-  returns the kinds of the current RNG settings, i.e. it is
-  identical to \code{RNGkind()}.
-
-  \code{RNGinfo} shows displays human readable information
-  about RNG settings. If \code{object} is missing it
-  displays information about the current RNG.
-
-  The functions documented here provide a unified interface
-  to work with RNG settings.
+  \code{getRNG} returns the Random Number Generator (RNG)
+  settings used for computing an object, using a suitable
+  \code{.getRNG} S4 method to extract these settings. For
+  example, in the case of objects that result from multiple
+  model fits, it would return the RNG settings used to
+  compute the best fit.
 
   \code{.getRNG} is an S4 generic that extract RNG settings
   from a variety of object types. Its methods define the
@@ -114,39 +73,20 @@
   reproduce the result only.
 
   \code{nextRNG} returns the RNG settings as they would be
-  after seeding with \code{seed}.
+  after seeding with \code{object}.
 
-  \code{setRNG} tries to extract RNG settings from
-  \code{object}, using a suitable \code{.setRNG} method to
-  set these settings. All arguments are passed to the next
-  call to \code{.setRNG}.
+  \code{setRNG} set the current RNG with a seed, using a
+  suitable \code{.setRNG} method to set these settings.
 
   \code{.setRNG} is an S4 generic that sets the current RNG
   settings, from a variety of specifications. Its methods
   define the workhorse functions that are called by
   \code{setRNG}.
-
-  \code{RNGdigest} computes a hash from the RNG settings
-  associated with an object.
-
-  \code{rng.equal} and \code{rng1.equal} return \code{TRUE}
-  the RNG settings associated with two objects are
-  identical, and \code{FALSE} otherwise. The comparison is
-  made between the hashes returned by \code{RNGdigest}.
-
-  The function \code{rng1.equal} tests whether two objects
-  have identical \strong{initial} RNG settings.
 }
 \details{
-  \code{getRNG} returns the Random Number Generator (RNG)
-  settings used for computing an object, using a suitable
-  \code{.getRNG} method to extract these settings. For
-  example, in the case of results from multiple NMF runs,
-  it returns the RNG settings used to compute the best fit.
-
   Think of a sequence of separate computations, from which
   only one result is used for the result (e.g. the one that
-  maximise a likelihood): \code{getRNG1} would return the
+  maximises a likelihood): \code{getRNG1} would return the
   RNG settings to reproduce the complete sequence of
   computations, while \code{getRNG} would return the RNG
   settings necessary to reproduce only the computation
@@ -176,7 +116,7 @@
   \code{'rng'}. }
 
   \item{.getRNG}{\code{signature(object = "numeric")}:
-  Methods for numeric vectors, which returns the object
+  Method for numeric vectors, which returns the object
   itself, if it has more than one element, coerced into an
   integer vector if necessary, as it is assumed to already
   represent a value for \code{\link{.Random.seed}}.
@@ -184,7 +124,11 @@
   Or if \code{object} has a single element, the value of
   \code{.Random.seed} as it would be after calling
   \code{set.seed(object, ...)} In this case, all arguments
-  in \code{...} are passed to \code{\link{set.seed}}. }
+  in \code{...} are passed to \code{\link{set.seed}}. Note
+  that this does not change the current RNG. }
+
+  \item{getRNG1}{\code{signature(object = "ANY")}: Default
+  method that is identical to \code{getRNG(object, ...)}. }
 
   \item{.setRNG}{\code{signature(object = "character")}:
   Sets the RNG to kind \code{object}, assuming is a valid
@@ -197,15 +141,21 @@
   value for \code{.Random.seed} or to initialise it with
   \code{\link{set.seed}}. }
 
-  \item{getRNG1}{\code{signature(object = "ANY")}: Default
-  method that is identical to \code{getRNG(object, ...)}. }
-
   }
 }
 \examples{
 # get current RNG settings
-head(getRNG())
-obj <- list(x=10, rng=123)
+s <- getRNG()
+head(s)
+showRNG(s)
+
+# get RNG from a given single numeric seed
+s <- getRNG(1234)
+head(s)
+showRNG(s)
+head(nextRNG())
+head(nextRNG(1234))
+obj <- list(x=1000, rng=123)
 setRNG(obj)
 rng <- getRNG()
 runif(10)
@@ -227,6 +177,9 @@ rng <- getRNG()
 runif(10)
 set.seed(123)
 rng.equal(rng)
+}
+\seealso{
+  \code{\link{.Random.seed}}, \code{\link{showRNG}}
 }
 \keyword{methods}
 

@@ -32,6 +32,7 @@ checkFun <- function(fn, name){
 
 test.RNGdigest <- function(){
 	
+	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
 	
 	fn <- c('RNGdigest', 'RNGstr')
@@ -75,6 +76,7 @@ checkRNGtype <- function(x, ..., expL=2L){
 
 test.RNGtype <- function(){
 	
+	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
 	checker <- checkRNGtype
 	

@@ -17,6 +17,7 @@ Depends:
 Imports:
     pkgmaker
 Suggests:
+    parallel,
     devtools,
     roxygen2,
     RUnit
@@ -24,3 +25,4 @@ Collate:
     'rngtools-package.r'
     'format.R'
     'RNG.R'
+    'RNGseq.R'

@@ -5,6 +5,7 @@
 
 test.getRNG <- function(){
 
+	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
 	
 	checker <- function(x, y, ..., drawRNG=TRUE){
@@ -38,6 +39,7 @@ test.getRNG <- function(){
 
 test.setRNG <- function(){
 	
+	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
 	
 	checker <- function(x, y, tset, drawRNG=TRUE){

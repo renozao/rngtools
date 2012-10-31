@@ -184,7 +184,12 @@ RNGrecovery <- function(){
 .getRNGattribute <- function(object){
 	if( .hasSlot(object, 'rng') ) slot(object, 'rng')
 	else if( .hasSlot(object, 'rng.seed') ) slot(object, 'rng.seed') # for back compatibility
-	else attr(object, 'rng')
+	else if( !is.null(attr(object, 'rng')) ) attr(object, 'rng')
+	else if( is.list(object) ){ # compatibility with package setRNG
+		if( !is.null(object[['rng']]) ) object[['rng']]
+		else if( is.list(object[['noise']]) && !is.null(object[['noise']][['rng']]) ) 
+			object[['noise']][['rng']]
+	}
 }
 
 #' Getting/Setting RNGs
@@ -197,9 +202,12 @@ RNGrecovery <- function(){
 #' 
 #' @param object an R object from which RNG settings can be extracted, e.g. an 
 #' integer vector containing a suitable value for \code{.Random.seed} or embedded 
-#' RNG data, e.g., in S3/S4 slot \code{rng}.
+#' RNG data, e.g., in S3/S4 slot \code{rng} or \code{rng$noise}.
 #' @param ... extra arguments to allow extension and passed to a suitable S4 method 
 #' \code{.getRNG} or \code{.setRNG}.
+#' @param num.ok logical that indicates if single numeric (not integer) RNG data should be 
+#' considered as a valid RNG seed (\code{TRUE}) or passed to \code{\link{set.seed}} 
+#' into a proper RNG seed (\code{FALSE}).
 #' 
 #' @return \code{getRNG}, \code{getRNG1}, \code{nextRNG} and \code{setRNG} 
 #' usually return an integer vector of length > 2L, like \code{\link{.Random.seed}}.
@@ -220,19 +228,41 @@ RNGrecovery <- function(){
 #' s <- getRNG(1234)
 #' head(s)
 #' showRNG(s)
+#' 
+#' # single integer RNG data 
+#' getRNG()
 #'  
-getRNG <- function(object, ...){
+getRNG <- function(object, ..., num.ok=FALSE){
 	
 	if( missing(object) || is.null(object) ) return( .getRNG() )
 	
 	# use RNG data from object if available
 	rng <- .getRNGattribute(object)
-	if( !is.null(rng) ) getRNG(rng, ...)
-	else if( isNumber(object)  ){
-		nextRNG(object, ...) # return RNG as if after setting seed
+	if( !is.null(rng) ){
+		if( hasRNG(rng) ) getRNG(rng, ..., num.ok=num.ok)
+		else rng
+	}else if( isNumber(object) ){
+		if( num.ok && isReal(object) ) object
+		else nextRNG(object, ...) # return RNG as if after setting seed
 	}else .getRNG(object, ...) # call S4 method on object
 	
 }
+
+#' \code{hasRNG} tells if an object has embedded RNG data.
+#' @export
+#' @rdname rng
+#' 
+#' @examples
+#' # test for embedded RNG data
+#' hasRNG(1)
+#' hasRNG( structure(1, rng=1:3) )
+#' hasRNG( list(1, 2, 3) )
+#' hasRNG( list(1, 2, 3, rng=1:3) )
+#' hasRNG( list(1, 2, 3, noise=list(1:3, rng=1)) )
+#' 
+hasRNG <- function(object){
+	!is.null(.getRNGattribute(object))
+} 
 
 #' \code{.getRNG} is an S4 generic that extract RNG settings from a variety of 
 #' object types.
@@ -367,9 +397,9 @@ nextRNG <- function(object, ...){
 	RNGseed()
 }
 
-.collapse <- function(x, sep=', ', n){
+.collapse <- function(x, sep=', ', n=7L){
 	
-	res <- paste(if( missing(n) ) x else head(x, n), collapse=', ')
+	res <- paste(head(x, n), collapse=', ')
 	if( length(x) > n )
 		res <- paste(res, '...', sep=', ')
 	res
@@ -468,19 +498,31 @@ setMethod('.setRNG', 'character',
 setMethod('.setRNG', 'numeric',
 	function(object, ...){
 		
-		seed <- as.integer(object)
-		if( length(seed) == 1L ){
-			set.seed(seed, ...)
+		if( length(object) == 1L ){
+			if( is.integer(object) ){ # set kind and draw once to fix seed
+				RNGseed(object)
+				# check validity of the seed
+				tryCatch(runif(1)
+					, error=function(err){					
+						stop("setRNG - Invalid RNG kind [", object, "]: "
+								, err$message, '.'
+								, call.=FALSE)
+				})
+				RNGseed()
+			}else{ # pass to set.seed
+				set.seed(object, ...)
+			}
 		}else{
-			assign('.Random.seed', seed, envir=.GlobalEnv)
+			seed <- as.integer(object)
+			RNGseed(seed)
 			# check validity of the seed
 			tryCatch(runif(1)
 			, error=function(err){					
-				stop("setRNG - Invalid value for .Random.seed ["
+				stop("setRNG - Invalid numeric seed ["
 					, .collapse(seed, n=5), "]: ", err$message, '.'
 					, call.=FALSE)
 			})
-			assign('.Random.seed', seed, envir=.GlobalEnv)			
+			RNGseed(seed)			
 		}
 	}
 )

@@ -81,12 +81,20 @@ test.RNGtype <- function(){
 	checker <- checkRNGtype
 	
 	checker()
-	checker(1234)
+	checker(1234, 'Valid single numeric seed')
 	checker(1:3, 'Valid seed')
 	x <- list(10, rng=c(401L, 1L, 1L))
 	checker(x, 'list with rng slot')
 	
+	# errors
 	oldRNG <- getRNG()
-	checkException(RNGtype(2:3), "Error with invalid seed")
+	checkException(RNGtype(2:3), "Error with invalid length seed")
 	checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+	#
+	checkException(RNGtype(1234L), "Error with invalid integer seed")
+	checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+	#
+	checkException(RNGtype(123L), "Error with invalid RNG kind")
+	checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+	#
 }

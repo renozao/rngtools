@@ -10,6 +10,7 @@
 \alias{.getRNG-methods}
 \alias{.getRNG,missing-method}
 \alias{.getRNG,numeric-method}
+\alias{hasRNG}
 \alias{nextRNG}
 \alias{setRNG}
 \alias{.setRNG}
@@ -18,7 +19,9 @@
 \alias{.setRNG,numeric-method}
 \title{Getting/Setting RNGs}
 \usage{
-  getRNG(object, ...)
+  getRNG(object, ..., process = TRUE)
+
+  hasRNG(object)
 
   .getRNG(object, ...)
 
@@ -34,11 +37,15 @@
   \item{object}{an R object from which RNG settings can be
   extracted, e.g. an integer vector containing a suitable
   value for \code{.Random.seed} or embedded RNG data, e.g.,
-  in S3/S4 slot \code{rng}.}
+  in S3/S4 slot \code{rng} or \code{rng$noise}.}
 
   \item{...}{extra arguments to allow extension and passed
   to a suitable S4 method \code{.getRNG} or
   \code{.setRNG}.}
+
+  \item{process}{logical that indicates if single numerical
+  values should be considered as seeds and resolved using
+  \code{\link{set.seed}} into a proper RNG seed.}
 
   \item{verbose}{a logical that indicates if the new RNG
   settings should be displayed.}
@@ -61,6 +68,8 @@
   example, in the case of objects that result from multiple
   model fits, it would return the RNG settings used to
   compute the best fit.
+
+  \code{hasRNG} tells if an object has embedded RNG data.
 
   \code{.getRNG} is an S4 generic that extract RNG settings
   from a variety of object types. Its methods define the
@@ -153,6 +162,12 @@ showRNG(s)
 s <- getRNG(1234)
 head(s)
 showRNG(s)
+# test for embedded RNG data
+hasRNG(1)
+hasRNG( structure(1, rng=1:3) )
+hasRNG( list(1, 2, 3) )
+hasRNG( list(1, 2, 3, rng=1:3) )
+hasRNG( list(1, 2, 3, noise=list(1:3, rng=1)) )
 head(nextRNG())
 head(nextRNG(1234))
 obj <- list(x=1000, rng=123)

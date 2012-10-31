@@ -19,7 +19,9 @@
 #' collapsed plus a digest hash of the complete seed.
 #' 
 #' @param object RNG seed (i.e. an integer vector), or an object that contains
-#' embedded RNG data. 
+#' embedded RNG data.
+#' For \code{RNGtype} this must be either a valid RNG seed or a single integer that 
+#' must be a valid encoded RNG kind (see \code{\link{RNGkind}}).
 #' @param n maximum length for a seed to be showed in full.
 #' If the seed has length greater than \code{n}, then only the first three elements
 #' are shown and a digest hash of the complete seed is appended to the string. 
@@ -38,7 +40,7 @@
 #' # no validity check is performed 
 #' RNGstr(2:3)
 #' 
-RNGstr <- function(object, n=7L){
+RNGstr <- function(object, n=7L, ...){
 	
 	if( missing(object) ){
 		rp <- RNGprovider()
@@ -50,13 +52,14 @@ RNGstr <- function(object, n=7L){
 	}
 	
 	# extract seed from object
-	seed <- getRNG(object)
+	seed <- getRNG(object, ...)
 	if( is.null(seed) ) 'NULL'
 	else if( is.numeric(seed) ){
-		if( length(seed) > n )
+		if( length(seed) > n ){
 			paste(str_out(seed, 3L),  str_c('[', digest(seed), ']'))
-		else 
+		}else{
 			str_out(seed, Inf)
+		}
 	}
 	else
 		paste(class(seed), ' [', digest(seed), ']', sep='')
@@ -84,20 +87,30 @@ RNGstr <- function(object, n=7L){
 #' RNGtype(provider=TRUE)
 #' RNGtype(1:3)
 #' 
-RNGtype <- function(object, provider=FALSE){
+#' # type from encoded RNG kind
+#' RNGtype(107L)
+#' # this is different from the following which treats 107 as a seed for set.seed
+#' RNGtype(107)
+#' 
+RNGtype <- function(object, ..., provider=FALSE){
 	
 	res <- 
-			if( missing(object) ){
-				RNGkind()
-			}else{
-				# extract RNG data
-				object <- getRNG(object)
-				# setup restoration
-				old <- RNGseed()
-				on.exit( RNGseed(old) )
-				setRNG(object)
-				RNGkind()
-			}
+	if( missing(object) ){
+		RNGkind()
+	}else{
+		# extract RNG data
+		rng <- object
+		if( !isInteger(object) ) rng <- getRNG(object, ...)
+		if( is.null(rng) ){
+			warning("Could not find embedded RNG data in ", deparse(substitute(object)), "."
+					, " Returned current type.")
+		}
+		# setup restoration
+		old <- RNGseed()
+		on.exit( RNGseed(old) )
+		setRNG(rng)
+		RNGkind()
+	}
 	
 	# determine provider if requested
 	if( provider ){
@@ -121,6 +134,10 @@ RNGtype <- function(object, provider=FALSE){
 #' showRNG()
 #' # as after set.seed(1234)
 #' showRNG(1234)
+#' showRNG()
+#' set.seed(1234)
+#' showRNG()
+#' # direct seeding
 #' showRNG(1:3)
 #' # this does not change the current RNG
 #' showRNG()
@@ -153,6 +170,8 @@ showRNG <- function(object=getRNG(), indent='#', ...){
 #' # get info as a list
 #' RNGinfo()
 #' RNGinfo(provider=TRUE)
+#' # from encoded RNG kind
+#' RNGinfo(107)
 #' 
 RNGinfo <- function(object=getRNG(), ...){
 	

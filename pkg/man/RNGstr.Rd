@@ -18,7 +18,10 @@
 }
 \arguments{
   \item{object}{RNG seed (i.e. an integer vector), or an
-  object that contains embedded RNG data.}
+  object that contains embedded RNG data. For
+  \code{RNGtype} this must be either a valid RNG seed or a
+  single integer that must be a valid encoded RNG kind (see
+  \code{\link{RNGkind}}).}
 
   \item{n}{maximum length for a seed to be showed in full.
   If the seed has length greater than \code{n}, then only
@@ -88,9 +91,18 @@ RNGstr(2:3)
 RNGtype()
 RNGtype(provider=TRUE)
 RNGtype(1:3)
+
+# type from encoded RNG kind
+RNGtype(107)
+# this is different from which assume 107 as a
+showRNG(107)
 showRNG()
 # as after set.seed(1234)
 showRNG(1234)
+showRNG()
+set.seed(1234)
+showRNG()
+# direct seeding
 showRNG(1:3)
 # this does not change the current RNG
 showRNG()
@@ -98,6 +110,8 @@ showRNG(provider=TRUE)
 # get info as a list
 RNGinfo()
 RNGinfo(provider=TRUE)
+# from encoded RNG kind
+RNGinfo(107)
 # compute digest hash from RNG settings
 RNGdigest()
 RNGdigest(1234)

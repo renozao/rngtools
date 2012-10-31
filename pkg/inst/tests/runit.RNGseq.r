@@ -3,19 +3,21 @@
 # Author: Renaud Gaujoux
 ###############################################################################
 
-test.seedRNGseq <- function(){
+library(parallel)
+
+test.RNGseq_seed <- function(){
 	
 	# actual testing function
 	.test_loc <- function(.msg, ..., .change=FALSE){
 		msg <- function(...) paste(.msg, ':', ...)
 		os <- RNGseed()
 		on.exit(RNGseed(os))
-		s <- seedRNGseq(...)
-		checkTrue(length(s) == 7L && s[1] %% 100 == 7L, msg("seedRNGseq returns a value of .Random.seed for L'Ecuyer-CMRG"))
-		checkIdentical(RNGseed()[1], os[1], msg("seedRNGseq does not change the type of RNG"))
+		s <- RNGseq_seed(...)
+		checkTrue(length(s) == 7L && s[1] %% 100 == 7L, msg("RNGseq_seed returns a value of .Random.seed for L'Ecuyer-CMRG"))
+		checkIdentical(RNGseed()[1], os[1], msg("RNGseq_seed does not change the type of RNG"))
 		
-		if( !.change ) checkIdentical(RNGseed(), os, msg("seedRNGseq does not change the value of .Random.seed"))
-		else checkTrue( !identical(RNGseed(), os), msg("seedRNGseq changes the value of .Random.seed"))
+		if( !.change ) checkIdentical(RNGseed(), os, msg("RNGseq_seed does not change the value of .Random.seed"))
+		else checkTrue( !identical(RNGseed(), os), msg("RNGseq_seed changes the value of .Random.seed"))
 		s
 	}
 	
@@ -71,26 +73,26 @@ test.seedRNGseq <- function(){
 	.test("seed=6-length integer", 1:6)
 	.test("seed=6-length numeric", as.numeric(1:6))
 	s <- 1:6
-	checkIdentical(seedRNGseq(s)[2:7], s, "seedRNGseq(6-length) returns stream to the given value")
+	checkIdentical(RNGseq_seed(s)[2:7], s, "RNGseq_seed(6-length) returns stream to the given value")
 	# directly set doRNG seed with a full 7-length .Random.seed
 	.test("seed=7-length integer", c(407L,1:6))
 	.test("seed=7-length numeric", as.numeric(c(107L,1:6)))
 	s <- c(407L,1:6)
-	checkIdentical(seedRNGseq(s), s, "seedRNGseq(7-length) returns complete seed with the given value")
+	checkIdentical(RNGseq_seed(s), s, "RNGseq_seed(7-length) returns complete seed with the given value")
 	
 	# errors
 	os <- RNGseed()
-	checkException(seedRNGseq(NA), "seed=NA throws an exception")
-	checkIdentical(os, RNGseed(), "seedRNGseq(NA) does not change the value of .Random.seed [error]")
+	checkException(RNGseq_seed(NA), "seed=NA throws an exception")
+	checkIdentical(os, RNGseed(), "RNGseq_seed(NA) does not change the value of .Random.seed [error]")
 	
 	# Current CMRG is L'Ecuyer
 	RNGkind("L'Ecuyer")
 	set.seed(456)
 	s <- RNGseed()
-	r <- seedRNGseq(NULL)
+	r <- RNGseq_seed(NULL)
 	checkIdentical(s, r, "Current is CMRG: seed=NULL return current stream")
 	runif(10)
-	checkIdentical(s, seedRNGseq(456), "Current is CMRG: seed=numeric return stream seeded with value")
+	checkIdentical(s, RNGseq_seed(456), "Current is CMRG: seed=numeric return stream seeded with value")
 	
 }
 
@@ -104,7 +106,7 @@ test.RNGseq <- function(){
 		msg <- function(...) paste(.msg, ':', ...)
 		os <- RNGseed()
 		on.exit(RNGseed(os))
-		
+	
 		s <- RNGseq(n, ...)
 		
 		if( !.change ) checkIdentical(RNGseed(), os, msg("the value of .Random.seed is not changed"))
@@ -134,6 +136,14 @@ test.RNGseq <- function(){
 	.test("n=2", 2)
 	.test("n=5", 5)
 	
+	# with full list
+	s <- RNGseq(3)
+	checkIdentical(RNGseq(length(s), s), s, "If passing a complete list: returns the list itself")
+	s3 <- RNGseq(5)
+	s <- structure(s, rng=s3)
+	checkIdentical(RNGseq(length(s3), s), s3, "If passing a complete list in rng S3 slot: returns the complete slot")
+	#
+
 	# Current RNG is CMRG
 	set.seed(456, "L'Ec")
 	s <- .Random.seed

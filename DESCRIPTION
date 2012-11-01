@@ -1,0 +1,28 @@
+Package: rngtools
+Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
+Author: Renaud Gaujoux
+Version: 1.0
+License: GPL-3
+Title: Utility functions for working with Random Number Generators
+Description: This package contains a set of functions for working with
+    Random Number Generators (RNGs). In particular, it defines a generic
+    S4 framework for getting/setting the current RNG, or RNG data
+    that are embedded into objects for reproducibility.
+    Notably, convenient default methods greatly facilitate the way current
+    RNG settings can be changed.
+Depends:
+    methods,
+    pkgmaker (>= 0.8.14),
+    stringr
+Imports:
+    pkgmaker
+Suggests:
+    parallel,
+    devtools,
+    roxygen2,
+    RUnit
+Collate:
+    'rngtools-package.r'
+    'format.R'
+    'RNG.R'
+    'RNGseq.R'

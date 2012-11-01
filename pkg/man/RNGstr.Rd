@@ -6,9 +6,9 @@
 \alias{showRNG}
 \title{Formatting RNG Information}
 \usage{
-  RNGstr(object, n = 7L)
+  RNGstr(object, n = 7L, ...)
 
-  RNGtype(object, provider = FALSE)
+  RNGtype(object, ..., provider = FALSE)
 
   showRNG(object = getRNG(), indent = "#", ...)
 
@@ -93,9 +93,9 @@ RNGtype(provider=TRUE)
 RNGtype(1:3)
 
 # type from encoded RNG kind
+RNGtype(107L)
+# this is different from the following which treats 107 as a seed for set.seed
 RNGtype(107)
-# this is different from which assume 107 as a
-showRNG(107)
 showRNG()
 # as after set.seed(1234)
 showRNG(1234)

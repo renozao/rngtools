@@ -83,6 +83,8 @@ test.RNGtype <- function(){
 	checker()
 	checker(1234, 'Valid single numeric seed')
 	checker(1:3, 'Valid seed')
+	checker(402L, 'Valid encoded kind')
+	checkTrue( !identical(RNGtype(402), RNGtype(402L)), "Single integer and real number does not give the same result")
 	x <- list(10, rng=c(401L, 1L, 1L))
 	checker(x, 'list with rng slot')
 	

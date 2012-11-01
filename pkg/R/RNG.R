@@ -200,6 +200,18 @@ RNGrecovery <- function(){
 #' For example, in the case of objects that result from multiple model fits, 
 #' it would return the RNG settings used to compute the best fit.
 #' 
+#' This function handles single number RNG specifications in the following way:
+#' \describe{
+#' \item{integers}{Return them unchanged, considering them as encoded RNG kind 
+#' specification (see \code{\link{RNG}}). No validity check is performed.}
+#' \item{real numbers}{If \code{num.ok=TRUE} return them unchanged.
+#' Otherwise, consider them as (pre-)seeds and pass them to \code{\link{set.seed}} 
+#' to get a proper RNG seed.
+#' Hence calling \code{getRNG(1234)} is equivalent to \code{set.seed(1234); getRNG()} 
+#' (See examples).
+#' }
+#' }
+#' 
 #' @param object an R object from which RNG settings can be extracted, e.g. an 
 #' integer vector containing a suitable value for \code{.Random.seed} or embedded 
 #' RNG data, e.g., in S3/S4 slot \code{rng} or \code{rng$noise}.
@@ -207,7 +219,12 @@ RNGrecovery <- function(){
 #' \code{.getRNG} or \code{.setRNG}.
 #' @param num.ok logical that indicates if single numeric (not integer) RNG data should be 
 #' considered as a valid RNG seed (\code{TRUE}) or passed to \code{\link{set.seed}} 
-#' into a proper RNG seed (\code{FALSE}).
+#' into a proper RNG seed (\code{FALSE}) (See details and examples).
+#' @param extract logical that indicates if embedded RNG data should be looked for and
+#' extracted (\code{TRUE}) or if the object itself should be considered as an 
+#' RNG specification.
+#' @param recursive logical that indicates if embedded RNG data should be extracted 
+#' recursively (\code{TRUE}) or only once (\code{FASE}). 
 #' 
 #' @return \code{getRNG}, \code{getRNG1}, \code{nextRNG} and \code{setRNG} 
 #' usually return an integer vector of length > 2L, like \code{\link{.Random.seed}}.
@@ -225,24 +242,33 @@ RNGrecovery <- function(){
 #' showRNG(s)
 #' 
 #' # get RNG from a given single numeric seed
-#' s <- getRNG(1234)
-#' head(s)
-#' showRNG(s)
+#' s1234 <- getRNG(1234)
+#' head(s1234)
+#' showRNG(s1234)
+#' # this is identical to the RNG seed as after set.seed()
+#' set.seed(1234)
+#' identical(s1234, .Random.seed)
+#' # but if num.ok=TRUE the object is returned unchanged
+#' getRNG(1234, num.ok=TRUE)
 #' 
-#' # single integer RNG data 
-#' getRNG()
+#' # single integer RNG data = encoded kind 
+#' head(getRNG(1L))
+#' 
+#' # embedded RNG data
+#' s <- getRNG(list(1L, rng=1234))
+#' identical(s, s1234)
 #'  
-getRNG <- function(object, ..., num.ok=FALSE){
+getRNG <- function(object, ..., num.ok=FALSE, extract=TRUE, recursive=TRUE){
 	
 	if( missing(object) || is.null(object) ) return( .getRNG() )
 	
 	# use RNG data from object if available
-	rng <- .getRNGattribute(object)
-	if( !is.null(rng) ){
-		if( hasRNG(rng) ) getRNG(rng, ..., num.ok=num.ok)
+	if( extract && !is.null(rng <- .getRNGattribute(object)) ){
+		if( recursive && hasRNG(rng) ) getRNG(rng, ..., num.ok=num.ok)
 		else rng
 	}else if( isNumber(object) ){
 		if( num.ok && isReal(object) ) object
+		else if( isInteger(object) ) object
 		else nextRNG(object, ...) # return RNG as if after setting seed
 	}else .getRNG(object, ...) # call S4 method on object
 	
@@ -361,13 +387,16 @@ setMethod('getRNG1', 'ANY',
 #' \code{nextRNG} returns the RNG settings as they would be after seeding with 
 #' \code{object}.
 #' 
+#' @param ndraw number of draws to perform before returning the RNG seed.
+#' 
 #' @rdname rng
 #' @export
 #' @examples 
 #' head(nextRNG())
 #' head(nextRNG(1234))
+#' head(nextRNG(1234, ndraw=10))
 #' 
-nextRNG <- function(object, ...){
+nextRNG <- function(object, ..., ndraw=0L){
 
 	# get/restore .Random.seed on.exit
 	orseed <- RNGseed()
@@ -393,8 +422,15 @@ nextRNG <- function(object, ...){
 	# set RNG 
 	.setRNG(object, ...)
 	
+	# perform some draws
+	if( ndraw > 0 ){
+		if( !isNumber(ndraw) )
+			stop("Invalid value in argument `ndraw`: single numeric value expected.")
+		runif(ndraw)
+	}
 	# return new RNG settings
-	RNGseed()
+	res <- RNGseed()
+	res
 }
 
 .collapse <- function(x, sep=', ', n=7L){

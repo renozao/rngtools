@@ -8,32 +8,35 @@ test.getRNG <- function(){
 	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
 	
-	checker <- function(x, y, ..., drawRNG=TRUE){
+	checker <- function(x, y, ..., msg=NULL, drawRNG=TRUE){
 		
 		if( drawRNG ) runif(10)
 		fn <- getRNG
 		oldRNG <- RNGseed()
 		if( !missing(x) ){
-			d <- fn(x)
-			obj <- getRNG(x)
+			d <- fn(x, ...)
 			cl <- str_c(class(x), '(', length(x), ')')
 		}else{
 			d <- fn()
-			obj <- getRNG()
 			cl <- 'MISSING'
 		}
 		newRNG <- RNGseed()
-		msg <- function(x, ...) paste(cl, ':', x, '[', ..., ']')
-		checkIdentical(oldRNG, newRNG, msg("does not change RNG", ...))
-		checkIdentical(d, y, msg("result is correct", ...) )
+		.msg <- function(x) paste(cl, ':', x, '[', msg, ']')
+		checkIdentical(oldRNG, newRNG, .msg("does not change RNG"))
+		checkIdentical(d, y, .msg("result is correct") )
 	}
 	
 	set.seed(123456)
 	seed123456 <- .Random.seed
-	checker(, seed123456, "No arguments: returns .Random.seed", drawRNG=FALSE)
-	checker(123456, seed123456, "Single numeric argument: returns .Random.seed as it would be after setting the seed")
-	checker(.Random.seed, .Random.seed, "Numeric seed argument: returns its argument unchanged")
-	checker(2:3, 2:3, "Numeric INVALID seed argument: returns its argument unchanged")
+	checker(, seed123456, msg="No arguments: returns .Random.seed", drawRNG=FALSE)
+	checker(123456, seed123456, msg="Single numeric argument: returns .Random.seed as it would be after setting the seed")
+	checker(123456, 123456, num.ok=TRUE, msg="Single numeric argument + num.ok: returns argument unchanged")
+	checker(.Random.seed, .Random.seed, msg="Integer seed argument: returns its argument unchanged")
+	checker(as.numeric(.Random.seed), .Random.seed, msg="Numeric seed argument: returns its argument as an integer vector")
+	checker(2:3, 2:3, msg="Integer INVALID seed vector argument: returns its argument unchanged")
+	checker(c(2,3), c(2L,3L), msg="Numeric INVALID seed vector argument: returns its argument as an integer vector")
+	checker(1L, 1L, msg="Single integer = Encoded RNG kind: returns it unchanged")
+	checker(1000L, 1000L, msg="Invalid single integer = Encoded RNG kind: returns it unchanged")
 	
 }
 
@@ -76,6 +79,9 @@ test.setRNG <- function(){
 	RNGrecovery()
 	set.seed(123)
 	checker(setRNG('Mar', 'Ahrens'), refseed, "Two character strings: change RNG kind and normal kind", drawRNG=FALSE)
+	RNGrecovery()
+	set.seed(123)
+	checker(setRNG(c('Mar', 'Ahrens')), refseed, "2-long character vector: change RNG kind and normal kind", drawRNG=FALSE)
 	
 	# setting kind
 	set.seed(123456, kind='Mar')

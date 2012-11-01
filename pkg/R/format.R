@@ -99,8 +99,7 @@ RNGtype <- function(object, ..., provider=FALSE){
 		RNGkind()
 	}else{
 		# extract RNG data
-		rng <- object
-		if( !isInteger(object) ) rng <- getRNG(object, ...)
+		rng <- getRNG(object, ...)
 		if( is.null(rng) ){
 			warning("Could not find embedded RNG data in ", deparse(substitute(object)), "."
 					, " Returned current type.")

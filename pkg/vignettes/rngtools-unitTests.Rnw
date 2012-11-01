@@ -17,13 +17,13 @@ authors <- packageDescription(pkg)$Author
 
 \usepackage[colorlinks]{hyperref}
 \author{\Sexpr{authors}}
-\title{\texttt{\Sexpr{pkg}}: Unit testing results\footnote{Vignette computed  on Wed Oct 31 16:19:08 2012}}
+\title{\texttt{\Sexpr{pkg}}: Unit testing results\footnote{Vignette computed  on Thu Nov  1 10:25:07 2012}}
 \date{\texttt{\Sexpr{pkg}} version \Sexpr{prettyVersion} as of \Sexpr{prettyDate}}
 \begin{document}
 \maketitle
 
 \begin{verbatim}
-RUNIT TEST PROTOCOL -- Wed Oct 31 16:19:08 2012 
+RUNIT TEST PROTOCOL -- Thu Nov  1 10:25:07 2012 
 *********************************************** 
 Number of test functions: 6 
 Number of errors: 0 

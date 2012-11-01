@@ -19,7 +19,8 @@
 \alias{.setRNG,numeric-method}
 \title{Getting/Setting RNGs}
 \usage{
-  getRNG(object, ..., process = TRUE)
+  getRNG(object, ..., num.ok = FALSE, extract = TRUE,
+    recursive = TRUE)
 
   hasRNG(object)
 
@@ -27,7 +28,7 @@
 
   getRNG1(object, ...)
 
-  nextRNG(object, ...)
+  nextRNG(object, ..., ndraw = 0L)
 
   setRNG(object, ..., verbose = FALSE)
 
@@ -43,9 +44,23 @@
   to a suitable S4 method \code{.getRNG} or
   \code{.setRNG}.}
 
-  \item{process}{logical that indicates if single numerical
-  values should be considered as seeds and resolved using
-  \code{\link{set.seed}} into a proper RNG seed.}
+  \item{num.ok}{logical that indicates if single numeric
+  (not integer) RNG data should be considered as a valid
+  RNG seed (\code{TRUE}) or passed to
+  \code{\link{set.seed}} into a proper RNG seed
+  (\code{FALSE}) (See details and examples).}
+
+  \item{extract}{logical that indicates if embedded RNG
+  data should be looked for and extracted (\code{TRUE}) or
+  if the object itself should be considered as an RNG
+  specification.}
+
+  \item{recursive}{logical that indicates if embedded RNG
+  data should be extracted recursively (\code{TRUE}) or
+  only once (\code{FASE}).}
+
+  \item{ndraw}{number of draws to perform before returning
+  the RNG seed.}
 
   \item{verbose}{a logical that indicates if the new RNG
   settings should be displayed.}
@@ -93,6 +108,17 @@
   \code{setRNG}.
 }
 \details{
+  This function handles single number RNG specifications in
+  the following way: \describe{ \item{integers}{Return them
+  unchanged, considering them as encoded RNG kind
+  specification (see \code{\link{RNG}}). No validity check
+  is performed.} \item{real numbers}{If \code{num.ok=TRUE}
+  return them unchanged. Otherwise, consider them as
+  (pre-)seeds and pass them to \code{\link{set.seed}} to
+  get a proper RNG seed. Hence calling \code{getRNG(1234)}
+  is equivalent to \code{set.seed(1234); getRNG()} (See
+  examples). } }
+
   Think of a sequence of separate computations, from which
   only one result is used for the result (e.g. the one that
   maximises a likelihood): \code{getRNG1} would return the
@@ -159,9 +185,21 @@ head(s)
 showRNG(s)
 
 # get RNG from a given single numeric seed
-s <- getRNG(1234)
-head(s)
-showRNG(s)
+s1234 <- getRNG(1234)
+head(s1234)
+showRNG(s1234)
+# this is identical to the RNG seed as after set.seed()
+set.seed(1234)
+identical(s1234, .Random.seed)
+# but if num.ok=TRUE the object is returned unchanged
+getRNG(1234, num.ok=TRUE)
+
+# single integer RNG data = encoded kind
+head(getRNG(1L))
+
+# embedded RNG data
+s <- getRNG(list(1L, rng=1234))
+identical(s, s1234)
 # test for embedded RNG data
 hasRNG(1)
 hasRNG( structure(1, rng=1:3) )
@@ -170,6 +208,7 @@ hasRNG( list(1, 2, 3, rng=1:3) )
 hasRNG( list(1, 2, 3, noise=list(1:3, rng=1)) )
 head(nextRNG())
 head(nextRNG(1234))
+head(nextRNG(1234, ndraw=10))
 obj <- list(x=1000, rng=123)
 setRNG(obj)
 rng <- getRNG()

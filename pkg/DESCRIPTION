@@ -12,7 +12,7 @@ Description: This package contains a set of functions for working with
     RNG settings can be changed.
 Depends:
     methods,
-    pkgmaker (>= 0.8.19),
+    pkgmaker (>= 0.9),
     stringr
 Imports:
     pkgmaker

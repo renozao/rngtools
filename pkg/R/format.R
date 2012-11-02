@@ -181,3 +181,27 @@ RNGinfo <- function(object=getRNG(), ...){
 	
 }
 
+
+#' Checking RNG Differences in Unit Tests
+#' 
+#' \code{checkRNG} checks if two objects have the same RNG
+#' settings and should be used in unit tests, e.g., with the \pkg{RUnit} 
+#' package.
+#' 
+#' @param x,y objects from which RNG settings are extracted.
+#' @param ... extra arguments passed to \code{\link{rng.equal}}.
+#' 
+#' @export
+#' @rdname uchecks
+#' @examples 
+#' 
+#' # check for differences in RNG
+#' set.seed(123)
+#' checkRNG(123)
+#' try( checkRNG(123, 123) )
+#' try( checkRNG(123, 1:3) )
+#' 
+checkRNG <- function(x, y=getRNG(), ...){
+	requireRUnit()
+	checkTrue(rng.equal(x, y), ...)
+}

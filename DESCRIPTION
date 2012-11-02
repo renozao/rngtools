@@ -12,14 +12,12 @@ Description: This package contains a set of functions for working with
     RNG settings can be changed.
 Depends:
     methods,
-    pkgmaker (>= 0.8.14),
+    pkgmaker (>= 0.9),
     stringr
 Imports:
     pkgmaker
 Suggests:
     parallel,
-    devtools,
-    roxygen2,
     RUnit
 Collate:
     'rngtools-package.r'

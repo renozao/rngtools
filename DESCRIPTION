@@ -1,5 +1,5 @@
 Package: rngtools
-Maintainer: Renaud Gaujoux <renaud@cbio.uct.ac.za>
+Maintainer: Renaud Gaujoux <renaud@mancala.cbio.uct.ac.za>
 Author: Renaud Gaujoux
 Version: 1.0
 License: GPL-3
@@ -10,6 +10,7 @@ Description: This package contains a set of functions for working with
     that are embedded into objects for reproducibility.
     Notably, convenient default methods greatly facilitate the way current
     RNG settings can be changed.
+URL: http://pkgmaker.r-forge.r-project.org/rngtools
 Depends:
     methods,
     pkgmaker (>= 0.9),

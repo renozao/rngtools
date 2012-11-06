@@ -62,11 +62,11 @@
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='rng.html'>getRNG</a></span><span class="keyword">(</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>RNGstr</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
-<div class='output'>[1] "403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548]"
+<div class='output'>[1] "403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]"
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>RNGtype</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
 <div class='output'>[1] "Mersenne-Twister" "Inversion"       
@@ -76,17 +76,17 @@
 <span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='rng.html'>nextRNG</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span> <span class="functioncall"><a href='rng.html'>nextRNG</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">,</span> <span class="argument">ndraw</span><span class="argument">=</span><span class="number">10</span><span class="keyword">)</span> <span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 10L, 1407173775L, ... [b9a4fab9a7ad828dbffae696eef6a31a] 
+# RNG state: 403L, 10L, ..., 467264024L [b9a4fab9a7ad828dbffae696eef6a31a] 
 </div>
 <div class='input'>
 <span class="comment"># change of RNG kind</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="symbol">k</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>RNGkind</a></span><span class="keyword">(</span><span class="keyword">)</span>
 <span class="symbol">k</span><span class="keyword">[</span><span class="number">2L</span><span class="keyword">]</span> <span class="assignement">&lt;-</span> <span class="string">'Ahrens'</span>
@@ -94,13 +94,13 @@
 <span class="functioncall"><a href='rng.html'>setRNG</a></span><span class="keyword">(</span><span class="symbol">k</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Ahrens-Dieter 
-# RNG state: 103L, 624L, 69318028L, ... [c96e855238c32059d90ca179f9b1b16a] 
+# RNG state: 103L, 624L, ..., -912150329L [c96e855238c32059d90ca179f9b1b16a] 
 </div>
 <div class='input'><span class="comment"># set encoded kind</span>
 <span class="functioncall"><a href='rng.html'>setRNG</a></span><span class="keyword">(</span><span class="number">501L</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
-# RNG state: 501L, 1451823495L, 21629720L 
+# RNG state: 501L, -2089726047L, 877448896L 
 </div>
 <div class='input'>
 <span class="comment"># use as set seed</span>
@@ -124,7 +124,7 @@
 <span class="functioncall"><a href='RNGseed.html'>RNGrecovery</a></span><span class="keyword">(</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -2099604517L, ... [6b9b92cc9debdb741d96ff4ef849aa33] 
+# RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33] 
 </div></pre>
   </div>
   <div class="span4">

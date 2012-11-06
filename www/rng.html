@@ -221,11 +221,11 @@
     <pre class="examples"><div class='input'><span class="comment"># get current RNG settings</span>
 <span class="symbol">s</span> <span class="assignement">&lt;-</span> <span class="functioncall"><a href='rng.html'>getRNG</a></span><span class="keyword">(</span><span class="keyword">)</span>
 <span class="functioncall"><a href='http://www.inside-r.org/r-doc/utils/head'>head</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
-<div class='output'>[1]         403           1 -1787151048   633993755 -2139495559   -16329272
+<div class='output'>[1]         403           1  1070180975  1347806629 -1349659300  1158039858
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="symbol">s</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 1L, -1787151048L, ... [2062a754679d6de162d71537574ac1ae] 
+# RNG state: 403L, 1L, ..., -1973066454L [d488a30e7e16f759f871d905faee0dfa] 
 </div>
 <div class='input'>
 <span class="comment"># get RNG from a given single numeric seed</span>
@@ -235,7 +235,7 @@
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="symbol">s1234</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="comment"># this is identical to the RNG seed as after set.seed()</span>
 <span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">)</span>

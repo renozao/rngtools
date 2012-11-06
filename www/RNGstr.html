@@ -130,11 +130,11 @@
     <h2 id="examples">Examples</h2>
     <pre class="examples"><div class='input'><span class="comment"># default is a 626-long integer</span>
 <span class="functioncall"><a href='RNGstr.html'>RNGstr</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
-<div class='output'>[1] "403L, 1L, 1654269195L, ... [833acd4e4ba35d1452512fffa0888c3f]"
+<div class='output'>[1] "403L, 1L, ..., 1450597184L [833acd4e4ba35d1452512fffa0888c3f]"
 </div>
 <div class='input'><span class="comment"># what would be the seed after seeding with set.seed(1234)</span>
 <span class="functioncall"><a href='RNGstr.html'>RNGstr</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">)</span></div>
-<div class='output'>[1] "403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548]"
+<div class='output'>[1] "403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]"
 </div>
 <div class='input'><span class="comment"># another RNG (short seed)</span>
 <span class="functioncall"><a href='RNGstr.html'>RNGstr</a></span><span class="keyword">(</span><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/c'>c</a></span><span class="keyword">(</span><span class="number">401L</span><span class="keyword">,</span> <span class="number">1L</span><span class="keyword">,</span> <span class="number">1L</span><span class="keyword">)</span><span class="keyword">)</span></div>
@@ -165,21 +165,21 @@
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 1L, 1654269195L, ... [833acd4e4ba35d1452512fffa0888c3f] 
+# RNG state: 403L, 1L, ..., 1450597184L [833acd4e4ba35d1452512fffa0888c3f] 
 </div>
 <div class='input'><span class="comment"># as after set.seed(1234)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 1L, 1654269195L, ... [833acd4e4ba35d1452512fffa0888c3f] 
+# RNG state: 403L, 1L, ..., 1450597184L [833acd4e4ba35d1452512fffa0888c3f] 
 </div>
 <div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">1234</span><span class="keyword">)</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="comment"># direct seeding</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span></div>
@@ -189,11 +189,11 @@
 <div class='input'><span class="comment"># this does not change the current RNG</span>
 <span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="functioncall"><a href='RNGstr.html'>showRNG</a></span><span class="keyword">(</span><span class="argument">provider</span><span class="argument">=</span><span class="number">TRUE</span><span class="keyword">)</span></div>
 <div class='output'># RNG kind:  Mersenne-Twister / Inversion [base] 
-# RNG state: 403L, 624L, -1394370482L, ... [eacb7c1288e03421d428feb736099548] 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
 </div>
 <div class='input'><span class="comment"># get info as a list</span>
 <span class="functioncall"><a href='RNGstr.html'>RNGinfo</a></span><span class="keyword">(</span><span class="keyword">)</span></div>

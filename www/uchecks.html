@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>checkRNG. rngtools 1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/highlight.css" rel="stylesheet">
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">rngtools 1.0</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Checking RNG Differences in Unit Tests</h1>
+
+<div class="row">
+  <div class="span8">
+    <h2>Usage</h2>
+    <pre><span class="functioncall"><a href='uchecks.html'>checkRNG</a></span><span class="keyword">(</span><span class="symbol">x</span><span class="keyword">,</span> <span class="argument">y</span> <span class="argument">=</span> <span class="functioncall"><a href='rng.html'>getRNG</a></span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">,</span> <span class="symbol">...</span><span class="keyword">)</span></pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>x,y</dt>
+      <dd>objects from which RNG settings are
+  extracted.</dd>
+      <dt>...</dt>
+      <dd>extra arguments passed to
+  <code><a href='rngcmp.html'>rng.equal</a></code>.</dd>
+    </dl>
+    
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p><code>checkRNG</code> checks if two objects have the same RNG
+  settings and should be used in unit tests, e.g., with the
+  <span class = "pkg">RUnit</span> package.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'><span class="comment"># check for differences in RNG</span>
+<span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></span><span class="keyword">(</span><span class="number">123</span><span class="keyword">)</span>
+<span class="functioncall"><a href='uchecks.html'>checkRNG</a></span><span class="keyword">(</span><span class="number">123</span><span class="keyword">)</span></div>
+<strong class='message'>Using RUnit framework provider: RUnit</strong>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/try'>try</a></span><span class="keyword">(</span> <span class="functioncall"><a href='uchecks.html'>checkRNG</a></span><span class="keyword">(</span><span class="number">123</span><span class="keyword">,</span> <span class="number">123</span><span class="keyword">)</span> <span class="keyword">)</span></div>
+<div class='output'>[1] TRUE
+</div>
+<div class='input'><span class="functioncall"><a href='http://www.inside-r.org/r-doc/base/try'>try</a></span><span class="keyword">(</span> <span class="functioncall"><a href='uchecks.html'>checkRNG</a></span><span class="keyword">(</span><span class="number">123</span><span class="keyword">,</span> <span class="number">1</span><span class="keyword">:</span><span class="number">3</span><span class="keyword">)</span> <span class="keyword">)</span></div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>checkRNG</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -3,6 +3,8 @@
 # Author: Renaud Gaujoux
 ###############################################################################
 
+library(stringr)
+
 test.getRNG <- function(){
 
 	RNGkind('default', 'default')

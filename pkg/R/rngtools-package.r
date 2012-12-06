@@ -11,6 +11,9 @@
 #' @name rngtools
 #' @docType package
 #' 
+#' @import stringr
+#' @import digest
+#' 
 #' @examples 
 #' 
 #' showRNG()

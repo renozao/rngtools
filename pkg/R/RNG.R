@@ -566,6 +566,7 @@ setMethod('.setRNG', 'numeric',
 #' \code{RNGdigest} computes a hash from the RNG settings associated with an 
 #' object.
 #' 
+#' @import digest
 #' @rdname RNGstr
 #' @export
 #' 

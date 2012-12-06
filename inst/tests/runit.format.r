@@ -3,6 +3,7 @@
 # Author: Renaud Gaujoux
 ###############################################################################
 
+library(stringr)
 library(pkgmaker)
 
 checkFun <- function(fn, name){

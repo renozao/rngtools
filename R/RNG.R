@@ -298,6 +298,16 @@ hasRNG <- function(object){
 #' @inline
 #' @export
 setGeneric('.getRNG', function(object, ...) standardGeneric('.getRNG') )
+#' Default method that tries to extract RNG information from \code{object}, by 
+#' looking sequentially to a slot named \code{'rng'}, a slot named \code{'rng.seed'}
+#' or an attribute names \code{'rng'}.
+#' 
+#' It returns \code{NULL} if no RNG data was found.
+setMethod('.getRNG', 'ANY',
+	function(object, ...){
+		.getRNGattribute(object)
+	}
+)
 #' Returns the current RNG settings.
 setMethod('.getRNG', 'missing',
 	function(object){
@@ -312,16 +322,6 @@ setMethod('.getRNG', 'missing',
 	}
 )
 
-#' Default method that tries to extract RNG information from \code{object}, by 
-#' looking sequentially to a slot named \code{'rng'}, a slot named \code{'rng.seed'}
-#' or an attribute names \code{'rng'}.
-#' 
-#' It returns \code{NULL} if no RNG data was found.
-setMethod('.getRNG', 'ANY',
-	function(object, ...){
-		.getRNGattribute(object)
-	}
-)
 #' Method for S3 objects, that aims at reproducing the behaviour of the function 
 #' \code{getRNG} of the package \code{getRNG}. 
 #' 

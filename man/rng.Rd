@@ -130,9 +130,6 @@
 \section{Methods}{
   \describe{
 
-  \item{.getRNG}{\code{signature(object = "missing")}:
-  Returns the current RNG settings. }
-
   \item{.getRNG}{\code{signature(object = "ANY")}: Default
   method that tries to extract RNG information from
   \code{object}, by looking sequentially to a slot named
@@ -140,6 +137,9 @@
   attribute names \code{'rng'}.
 
   It returns \code{NULL} if no RNG data was found. }
+
+  \item{.getRNG}{\code{signature(object = "missing")}:
+  Returns the current RNG settings. }
 
   \item{.getRNG}{\code{signature(object = "list")}: Method
   for S3 objects, that aims at reproducing the behaviour of

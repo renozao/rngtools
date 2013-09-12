@@ -189,7 +189,7 @@ RNGrecovery <- function(){
 		if( !is.null(object[['rng']]) ) object[['rng']]
 		else if( is.list(object[['noise']]) && !is.null(object[['noise']][['rng']]) ) 
 			object[['noise']][['rng']]
-	}
+	}else NULL
 }
 
 #' Getting/Setting RNGs
@@ -341,14 +341,9 @@ setMethod('.getRNG', 'list',
 #			object	
 #		}
 #)
-#' Method for numeric vectors, which returns the object itself, if it has more than one 
-#' element, coerced into an integer vector if necessary, as it is assumed to 
-#' already represent a value for \code{\link{.Random.seed}}.
-#' 
-#' Or if \code{object} has a single element, the value of \code{.Random.seed} as 
-#' it would be after calling \code{set.seed(object, ...)}
-#' In this case, all arguments in \code{...} are passed to \code{\link{set.seed}}.
-#' Note that this does not change the current RNG.
+#' Method for numeric vectors, which returns the object itself, coerced into an integer 
+#' vector if necessary, as it is assumed to already represent a value for 
+#' \code{\link{.Random.seed}}.
 #' 
 setMethod('.getRNG', 'numeric',
 	function(object, ...){

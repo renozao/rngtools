@@ -13,7 +13,7 @@ Description: This package contains a set of functions for working with
 URL: http://pkgmaker.r-forge.r-project.org/rngtools
 Depends:
     methods,
-    pkgmaker (>= 0.16.4)
+    pkgmaker (>= 0.17)
 Imports:
     stringr,
     digest

@@ -94,12 +94,10 @@ test.RNGtype <- function(){
 	checkException(RNGtype(2:3), "Error with invalid length seed")
 	checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
 	#
-	if( testRversion('<= 3.1') ){
-        checkException(RNGtype(1234L), "Error with invalid integer seed")
-	    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
-	    #
-	    checkException(RNGtype(123L), "Error with invalid RNG kind")
-	    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
-	    #
-    }
+    
+    oldRNG <- getRNG()
+    checkException(RNGtype(123L), "Error with invalid RNG kind")
+    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+    checkException(RNGtype(1234L), "Error with invalid RNG integer")
+    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
 }

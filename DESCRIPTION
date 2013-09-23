@@ -1,7 +1,7 @@
 Package: rngtools
 Maintainer: Renaud Gaujoux <renaud@mancala.cbio.uct.ac.za>
 Author: Renaud Gaujoux
-Version: 1.2.2
+Version: 1.2.3
 License: GPL-3
 Title: Utility functions for working with Random Number Generators
 Description: This package contains a set of functions for working with
@@ -12,6 +12,7 @@ Description: This package contains a set of functions for working with
     RNG settings can be changed.
 URL: http://pkgmaker.r-forge.r-project.org/rngtools
 Depends:
+    R (>= 3.0.0),
     methods,
     pkgmaker (>= 0.17)
 Imports:
@@ -19,9 +20,11 @@ Imports:
     digest
 Suggests:
     parallel,
-    RUnit
+    RUnit,
+    knitr
 Collate:
     'rngtools-package.r'
     'format.R'
     'RNG.R'
     'RNGseq.R'
+VignetteBuilder: knitr

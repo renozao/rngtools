@@ -30,7 +30,7 @@
 
   nextRNG(object, ..., ndraw = 0L)
 
-  setRNG(object, ..., verbose = FALSE)
+  setRNG(object, ..., verbose = FALSE, check = TRUE)
 
   .setRNG(object, ...)
 }
@@ -61,6 +61,11 @@
 
   \item{ndraw}{number of draws to perform before returning
   the RNG seed.}
+
+  \item{check}{logical that indicates if only valid RNG
+  kinds should be accepted, or if invalid values should
+  just throw a warning. Note that this argument is used
+  only on R >= 3.0.2.}
 
   \item{verbose}{a logical that indicates if the new RNG
   settings should be displayed.}

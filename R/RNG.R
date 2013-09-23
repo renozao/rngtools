@@ -439,6 +439,10 @@ nextRNG <- function(object, ..., ndraw=0L){
 #' \code{setRNG} set the current RNG with a seed, 
 #' using a suitable \code{.setRNG} method to set these settings.
 #'
+#' @param check logical that indicates if only valid RNG kinds should be
+#' accepted, or if invalid values should just throw a warning.
+#' Note that this argument is used only on R >= 3.0.2.
+#' 
 #' @return \code{setRNG} invisibly returns the old RNG settings as 
 #' they were before changing them.
 #' 
@@ -453,7 +457,7 @@ nextRNG <- function(object, ..., ndraw=0L){
 #' set.seed(123)
 #' rng.equal(rng)
 #' 
-setRNG <- function(object, ..., verbose=FALSE){
+setRNG <- function(object, ..., verbose=FALSE, check = TRUE){
 	
 	# do nothing if null
 	if( is.null(object) ) return()
@@ -470,7 +474,19 @@ setRNG <- function(object, ..., verbose=FALSE){
 	})
 
 	# call S4 method on object
-	.setRNG(object, ...) 
+    # check validity of the seed
+	tryCatch(.setRNG(object, ...)
+            , warning = function(err){
+                if( check && testRversion('> 3.0.1') 
+                        && grepl("\\.Random\\.seed.* is not a valid", err$message) ){
+                    stop("setRNG - Invalid RNG kind [", str_out(object), "]: "
+							, err$message, '.'
+							, call.=FALSE)
+                }else{
+                    warning(err)
+                }
+            } 
+    )
 	
 	# cancel RNG restoration
 	on.exit()
@@ -534,12 +550,13 @@ setMethod('.setRNG', 'numeric',
 				RNGseed(object)
 				# check validity of the seed
 				tryCatch(runif(1)
-					, error=function(err){					
+					, error = function(err){					
 						stop("setRNG - Invalid RNG kind [", object, "]: "
 								, err$message, '.'
 								, call.=FALSE)
-				})
-				RNGseed()
+				    }
+                )
+                RNGseed()
 			}else{ # pass to set.seed
 				set.seed(object, ...)
 			}
@@ -552,7 +569,8 @@ setMethod('.setRNG', 'numeric',
 				stop("setRNG - Invalid numeric seed ["
 					, .collapse(seed, n=5), "]: ", err$message, '.'
 					, call.=FALSE)
-			})
+			    }
+            )
 			RNGseed(seed)			
 		}
 	}

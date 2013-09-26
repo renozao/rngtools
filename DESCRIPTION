@@ -14,7 +14,7 @@ URL: http://pkgmaker.r-forge.r-project.org/rngtools
 Depends:
     R (>= 3.0.0),
     methods,
-    pkgmaker (>= 0.17)
+    pkgmaker (>= 0.17.4)
 Imports:
     stringr,
     digest

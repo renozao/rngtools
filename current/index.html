@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>Index. rngtools 1.2</title>
+<title>Index. rngtools 1.2.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="Renaud Gaujoux">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,14 +30,14 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.2</a>
+      <a class="brand" href="index.html">rngtools 1.2.3</a>
       <div class="nav">
         <ul class="nav">
         <li><a href=""><i class="icon-home icon-white"></i> Index</a></li>
-       <li><a href="_MAN.html">Documentation</a></li>
+       <li><a href="PAGE-MAN.html">Documentation</a></li>
        </ul>
    	  </div>
     </div>
@@ -51,12 +54,18 @@
   	<h1>Utility functions for working with Random Number Generators</h1>
   	
 	  
-    This package contains a set of functions for working with
+    <h1>rngtools</h1>
+
+<p>R package - Utility functions for working with Random Number Generators</p>
+
+<p>This package contains a set of functions for working with
 Random Number Generators (RNGs). In particular, it defines a generic
 S4 framework for getting/setting the current RNG, or RNG data
-that are embedded into objects for reproducibility.
-Notably, convenient default methods greatly facilitate the way current
-RNG settings can be changed.
+that are embedded into objects for reproducibility.</p>
+
+<p>Notably, convenient default methods greatly facilitate the way current
+RNG settings can be changed.</p>
+
 
     <h2>Help topics</h2>
 
@@ -100,9 +109,10 @@ RNG settings can be changed.
         
     <h2>Dependencies</h2>
     <ul>
+      <li><strong>R version</strong>: R &gt;= 3.0.0</li>
       <li><strong>Depends</strong>: methods, pkgmaker</li>
       <li><strong>Imports</strong>: stringr, digest</li>
-      <li><strong>Suggests</strong>: parallel, RUnit</li>
+      <li><strong>Suggests</strong>: parallel, RUnit, knitr</li>
       
     </ul>
      
@@ -129,7 +139,7 @@ RNG settings can be changed.
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

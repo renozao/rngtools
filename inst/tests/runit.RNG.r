@@ -109,6 +109,25 @@ test.setRNG <- function(){
 	refseed <- .Random.seed
 	checkException( setRNG(2:3), "numeric vector: throws an error if invalid value for .Random.seed")
 	checkIdentical( .Random.seed, refseed, ".Random.seed is not changed in case of an error in setRNG")
+    
+    oldRNG <- getRNG()
+    checkException(setRNG(1234L), "Error with invalid integer seed")
+    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+    checkException(setRNG(123L), "Error with invalid RNG kind")
+    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+
+    # changes in R >= 3.0.2: invalid seeds only throw warning
+    if( testRversion('> 3.0.1') ){
+        oldRNG <- getRNG()
+        checkWarning(setRNG(1234L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
+                        , "Invalid integer kind: Warning only if check = FALSE")
+        checkIdentical(1234L, getRNG(), "RNG has new invalid integer value")
+        setRNG(oldRNG)
+        checkWarning(setRNG(123L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
+                        , "Invalid kind: Warning only if check = FALSE")
+        checkIdentical(123L, getRNG(), "RNG has new invalid RNG kind")
+                                                
+    }
 	
 }
 

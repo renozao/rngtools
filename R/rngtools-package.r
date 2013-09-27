@@ -13,6 +13,8 @@
 #' 
 #' @import stringr
 #' @import digest
+#' @import methods
+#' @import pkgmaker
 #' 
 #' @examples 
 #' 

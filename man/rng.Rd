@@ -30,7 +30,7 @@
 
   nextRNG(object, ..., ndraw = 0L)
 
-  setRNG(object, ..., verbose = FALSE)
+  setRNG(object, ..., verbose = FALSE, check = TRUE)
 
   .setRNG(object, ...)
 }
@@ -61,6 +61,11 @@
 
   \item{ndraw}{number of draws to perform before returning
   the RNG seed.}
+
+  \item{check}{logical that indicates if only valid RNG
+  kinds should be accepted, or if invalid values should
+  just throw a warning. Note that this argument is used
+  only on R >= 3.0.2.}
 
   \item{verbose}{a logical that indicates if the new RNG
   settings should be displayed.}
@@ -130,9 +135,6 @@
 \section{Methods}{
   \describe{
 
-  \item{.getRNG}{\code{signature(object = "missing")}:
-  Returns the current RNG settings. }
-
   \item{.getRNG}{\code{signature(object = "ANY")}: Default
   method that tries to extract RNG information from
   \code{object}, by looking sequentially to a slot named
@@ -140,6 +142,9 @@
   attribute names \code{'rng'}.
 
   It returns \code{NULL} if no RNG data was found. }
+
+  \item{.getRNG}{\code{signature(object = "missing")}:
+  Returns the current RNG settings. }
 
   \item{.getRNG}{\code{signature(object = "list")}: Method
   for S3 objects, that aims at reproducing the behaviour of
@@ -152,15 +157,9 @@
 
   \item{.getRNG}{\code{signature(object = "numeric")}:
   Method for numeric vectors, which returns the object
-  itself, if it has more than one element, coerced into an
-  integer vector if necessary, as it is assumed to already
-  represent a value for \code{\link{.Random.seed}}.
-
-  Or if \code{object} has a single element, the value of
-  \code{.Random.seed} as it would be after calling
-  \code{set.seed(object, ...)} In this case, all arguments
-  in \code{...} are passed to \code{\link{set.seed}}. Note
-  that this does not change the current RNG. }
+  itself, coerced into an integer vector if necessary, as
+  it is assumed to already represent a value for
+  \code{\link{.Random.seed}}. }
 
   \item{getRNG1}{\code{signature(object = "ANY")}: Default
   method that is identical to \code{getRNG(object, ...)}. }

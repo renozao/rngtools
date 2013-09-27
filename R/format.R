@@ -98,6 +98,8 @@ RNGtype <- function(object, ..., provider=FALSE){
 	if( missing(object) ){
 		RNGkind()
 	}else{
+        old <- RNGseed()
+		
 		# extract RNG data
 		rng <- getRNG(object, ...)
 		if( is.null(rng) ){
@@ -105,7 +107,6 @@ RNGtype <- function(object, ..., provider=FALSE){
 					, " Returned current type.")
 		}
 		# setup restoration
-		old <- RNGseed()
 		on.exit( RNGseed(old) )
 		setRNG(rng)
 		RNGkind()

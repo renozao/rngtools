@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>rngtools. rngtools 1.2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v2.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar">
+  <div class="navbar-inner">
+    <div class = "container">
+      <a class="brand" href="index.html">rngtools 1.2</a>
+      <div class="nav">
+        <ul class="nav">
+        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+       </ul>
+   	  </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Utility functions for working with Random Number Generators</h1>
+
+<div class="row">
+  <div class="span8">
+        
+    <div class="Description">
+      <h2>Description</h2>
+      
+      <p>This package contains a set of functions for working with
+  Random Number Generators (RNGs). In particular, it
+  defines a generic S4 framework for getting/setting the
+  current RNG, or RNG data that are embedded into objects
+  for reproducibility.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Notably, convenient default methods greatly facilitate
+  the way current RNG settings can be changed.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre class="examples"><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
+</div><div class='input'>s <- getRNG()
+</div><div class='input'>RNGstr(s)
+</div>
+<div class='output'>[1] "403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]"
+</div><div class='input'>RNGtype(s)
+</div>
+<div class='output'>[1] "Mersenne-Twister" "Inversion"       
+</div><div class='input'></div><div class='input'># get what would be the RNG seed after set.seed</div><div class='input'>s <- nextRNG(1234)
+</div><div class='input'>showRNG(s)
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
+</div><div class='input'>showRNG( nextRNG(1234, ndraw=10) )
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 10L, ..., 467264024L [b9a4fab9a7ad828dbffae696eef6a31a] 
+</div><div class='input'></div><div class='input'># change of RNG kind</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548] 
+</div><div class='input'>k <- RNGkind()
+</div><div class='input'>k[2L] <- 'Ahrens'
+</div><div class='input'>try( RNGkind(k) )
+</div><div class='input'>setRNG(k)
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Ahrens-Dieter 
+# RNG state: 103L, 624L, ..., -912150329L [c96e855238c32059d90ca179f9b1b16a] 
+</div><div class='input'># set encoded kind</div><div class='input'>setRNG(501L)
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
+# RNG state: 501L, 1613611859L, 1155293435L 
+</div><div class='input'></div><div class='input'># use as set seed</div><div class='input'>setRNG(1234)
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
+# RNG state: 501L, -305777535L, -1394370482L 
+</div><div class='input'>r <- getRNG()
+</div><div class='input'></div><div class='input'># extract embedded RNG specifications</div><div class='input'>runif(10)
+</div>
+<div class='output'> [1] 0.02611692 0.29453091 0.31486926 0.41448683 0.88493737 0.33931239 0.43921381 0.30835479 0.62447131 0.05536673
+</div><div class='input'>setRNG(list(1, rng=1234))
+</div><div class='input'>rng.equal(r)
+</div>
+<div class='output'>[1] TRUE
+</div><div class='input'></div><div class='input'># restore default RNG (e.g., after errors)</div><div class='input'>RNGrecovery()
+</div><div class='input'>showRNG()
+</div>
+<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
+# RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33] 
+</div></pre>
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>rngtools</li><li>rngtools-package</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

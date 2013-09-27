@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-<title>RNGseed. rngtools 1.2</title>
+<title>RNGseed. rngtools 1.2.3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="">
 
@@ -13,6 +13,9 @@
 <link href="css/highlight.css" rel="stylesheet">
 <!-- custom css -->
 <link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 
 <!-- bootstrap javascript -->
 <script src="js/jquery.min.js"></script>
@@ -27,13 +30,13 @@
   </head>
 
   <body>
-    <div class="navbar">
+    <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class = "container">
-      <a class="brand" href="index.html">rngtools 1.2</a>
+      <a class="brand" href="index.html">rngtools 1.2.3</a>
       <div class="nav">
         <ul class="nav">
-        <li><a href="_MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
+        <li><a href="PAGE-MAN.html"><i class="icon-home icon-white"></i> Index</a></li>
        </ul>
    	  </div>
     </div>
@@ -49,6 +52,19 @@
 
 <div class="row">
   <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p><code>RNGseed</code> directly gets/sets the current RNG seed
+  <code>.Random.seed</code>. It can typically be used to backup
+  and restore the RNG state on exit of functions, enabling
+  local RNG changes.</p>
+<p><code>RNGrecovery</code> recovers from a broken state of
+  <code>.Random.seed</code>, and reset the RNG settings to
+  defaults.</p></p>
+  
+    </div>
+    
     <h2>Usage</h2>
     <pre>RNGseed(seed)
 
@@ -70,56 +86,75 @@ RNGrecovery()</pre>
   changing it to <code>seed</code>.</p>
   
     </div>
-
-    <div class="Description">
-      <h2>Description</h2>
-      
-      <p><code>RNGseed</code> directly gets/sets the current RNG seed
-  <code>.Random.seed</code>. It can typically be used to backup
-  and restore the RNG state on exit of functions, enabling
-  local RNG changes.</p>
-  
-      <p><code>RNGrecovery</code> recovers from a broken state of
-  <code>.Random.seed</code>, and reset the RNG settings to
-  defaults.</p>
-  
-    </div>
     
     <h2 id="examples">Examples</h2>
-    <pre class="examples"><div class='input'># get current seed</div><div class='input'>RNGseed()
-</div><div class='input'># directly set seed</div><div class='input'>old <- RNGseed(c(401L, 1L, 1L))
-</div><div class='input'># show old/new seed description</div><div class='input'>showRNG(old)
-</div>
-<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, ..., 2099891502L [e38d032700af470a3a1013304e0fcab6] 
-</div><div class='input'>showRNG()
-</div>
-<div class='output'># RNG kind:  Marsaglia-Multicarry / Inversion 
-# RNG state: 401L, 1L, 1L 
-</div><div class='input'></div><div class='input'># set bad seed</div><div class='input'>RNGseed(2:3)
-</div><div class='input'>try( showRNG() )
-</div><div class='input'># recover from bad state</div><div class='input'>RNGrecovery()
-</div><div class='input'>showRNG()
-</div>
-<div class='output'># RNG kind:  Mersenne-Twister / Inversion 
-# RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33] 
-</div><div class='input'></div><div class='input'># example of backup/restore of RNG in functions</div><div class='input'>f <- function(){
-	orng <- RNGseed()
+    <pre><code class="r">
+# get current seed
+RNGseed()
+# directly set seed
+old &lt;- RNGseed(c(401L, 1L, 1L))
+# show old/new seed description
+showRNG(old)
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 1L, ..., 158653635L [c1bc83f56622831af30c8e195ec5003e]
+</code></pre>
+
+<pre><code class="r">showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Marsaglia-Multicarry / Inversion 
+## # RNG state: 401L, 1L, 1L
+</code></pre>
+
+<pre><code class="r">
+# set bad seed
+RNGseed(2:3)
+try( showRNG() )
+# recover from bad state
+RNGrecovery()
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33]
+</code></pre>
+
+<pre><code class="r">
+# example of backup/restore of RNG in functions
+f &lt;- function(){
+    orng &lt;- RNGseed()
  on.exit(RNGseed(orng))
-	RNGkind('Marsaglia')
-	runif(10)
+    RNGkind(&#39;Marsaglia&#39;)
+    runif(10)
 }
-</div><div class='input'></div><div class='input'>sample(NA)
-</div>
-<div class='output'>[1] NA
-</div><div class='input'>s <- .Random.seed
-</div><div class='input'>f()
-</div>
-<div class='output'> [1] 0.9465679 0.6266111 0.3896875 0.3947692 0.1071452 0.7840478 0.3223734 0.2288971 0.7144534 0.5210440
-</div><div class='input'>identical(s, .Random.seed)
-</div>
-<div class='output'>[1] TRUE
-</div><div class='input'></div></pre>
+
+sample(NA)
+</code></pre>
+
+<pre><code>## [1] NA
+</code></pre>
+
+<pre><code class="r">s &lt;- .Random.seed
+f()
+</code></pre>
+
+<pre><code>##  [1] 0.9466 0.6266 0.3897 0.3948 0.1071 0.7840 0.3224 0.2289 0.7145 0.5210
+</code></pre>
+
+<pre><code class="r">identical(s, .Random.seed)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">## Don&#39;t show: 
+ stopifnot(identical(s, .Random.seed)) 
+## End Don&#39;t show
+
+</code></pre>
+
   </div>
   <div class="span4">
     <!-- <ul>
@@ -135,7 +170,7 @@ RNGrecovery()</pre>
       
       <footer>
       <p class="pull-right"><a href="#">Back to top</a></p>
-<p>Built by <a href="https://github.com/hadley/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
       </footer>
     </div>
   </body>

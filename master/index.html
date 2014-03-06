@@ -84,46 +84,35 @@ RNG settings can be changed.</p>
     <h2>Help topics</h2>
 
 	<div id="cloud"></div>
-	<script>
-var fill = d3.scale.category20();
-  wordScale=d3.scale.log().domain([1, 17]).range([10, 100]);
-  var w = 600, h = 600;
- var datawords=["rng.equal:2", "getRNG:17", "RNGseed:2", "RNGseq:2", "RNGstr:5", "rngtools:2", "checkRNG:1"];
-
-d3.layout.cloud().size([w, h])
-      .words(datawords.map(function(d) {
-		d = d.split(":");
-        return {key: d[0], value: d[1] * 1};
-      }))
-      .spiral("rectangular")
-      .padding(2)
-      //.rotate(function() { return  ~~(Math.random() * 2) * 90; })
-      .text(function(d) { return d.key; })
-      .fontSize(function(d) { return wordScale(d.value); })
-      .on("end", draw)
-      .start();
-
-  function draw(words) {
-    d3.select("#cloud").append("svg")
-        .attr("width", w)
-        .attr("height", h)
-      .append("g")
-        .attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
-        .style("font-family", "Impact")
-        .style("fill", function(d, i) { return fill(i); })
-        .attr("text-anchor", "middle")
-        .attr("class", "cloud-txt")
-        .attr("transform", function(d) {
-          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function(d) { return d.text; });
-  }
-</script>
 	
+	
+    <h3></h3>
+    
+    
+    <ul class="index">
+        
+      <li>
+        <code><a href="uchecks.html">checkRNG</a></code><br />Checking RNG Differences in Unit Tests</li>
+            
+      <li>
+        <code><a href="rng.html">getRNG</a></code>(.getRNG, getRNG1, getRNG1,ANY-method, getRNG1-methods, .getRNG,ANY-method, .getRNG,list-method, .getRNG-methods, .getRNG,missing-method, .getRNG,numeric-method, hasRNG, nextRNG, setRNG, .setRNG, .setRNG,character-method, .setRNG-methods, .setRNG,numeric-method)<br />Getting/Setting RNGs</li>
+            
+      <li>
+        <code><a href="rngcmp.html">rng.equal</a></code>(rng1.equal)<br />Comparing RNG Settings</li>
+            
+      <li>
+        <code><a href="RNGseed.html">RNGseed</a></code>(RNGrecovery)<br />Directly Getting or Setting the RNG Seed</li>
+            
+      <li>
+        <code><a href="RNGseq.html">RNGseq</a></code>(RNGseq_seed)<br />Generate Sequence of Random Streams</li>
+            
+      <li>
+        <code><a href="RNGstr.html">RNGstr</a></code>(RNGdigest, RNGinfo, RNGtype, showRNG)<br />Formatting RNG Information</li>
+            
+      <li>
+        <code><a href="rngtools.html">rngtools</a></code>(rngtools-package)<br />Utility functions for working with Random Number Generators</li>
+    
+    </ul>
   </div>
   
   <div class="col-xs-6 col-sm-6 col-md-4">

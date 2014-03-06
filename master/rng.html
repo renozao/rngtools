@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>getRNG. rngtools 1.2.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">rngtools</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;1.2.4</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Getting/Setting RNGs</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p><code>getRNG</code> returns the Random Number Generator (RNG)
+  settings used for computing an object, using a suitable
+  <code>.getRNG</code> S4 method to extract these settings. For
+  example, in the case of objects that result from multiple
+  model fits, it would return the RNG settings used to
+  compute the best fit.</p>
+<p><code>hasRNG</code> tells if an object has embedded RNG data.</p>
+<p><code>.getRNG</code> is an S4 generic that extract RNG settings
+  from a variety of object types. Its methods define the
+  workhorse functions that are called by <code>getRNG</code>.</p>
+<p><code>getRNG1</code> is defined to provide separate access to
+  the RNG settings as they were at the very beginning of a
+  whole computation, which might differ from the RNG
+  settings returned by <code>getRNG</code>, that allows to
+  reproduce the result only.</p>
+<p><code>nextRNG</code> returns the RNG settings as they would be
+  after seeding with <code>object</code>.</p>
+<p><code>setRNG</code> set the current RNG with a seed, using a
+  suitable <code>.setRNG</code> method to set these settings.</p>
+<p><code>.setRNG</code> is an S4 generic that sets the current RNG
+  settings, from a variety of specifications. Its methods
+  define the workhorse functions that are called by
+  <code>setRNG</code>.</p></p>
+  
+    </div>
+    
+    <h2>Usage</h2>
+    <pre>getRNG(object, ..., num.ok = FALSE, extract = TRUE, recursive = TRUE)
+
+hasRNG(object)
+
+.getRNG(object, ...)
+
+getRNG1(object, ...)
+
+nextRNG(object, ..., ndraw = 0L)
+
+setRNG(object, ..., verbose = FALSE, check = TRUE)
+
+.setRNG(object, ...)</pre>
+    
+    <h2>Arguments</h2>
+    <dl>
+      <dt>object</dt>
+      <dd>an R object from which RNG settings can be
+  extracted, e.g. an integer vector containing a suitable
+  value for <code>.Random.seed</code> or embedded RNG data, e.g.,
+  in S3/S4 slot <code>rng</code> or <code>rng$noise</code>.</dd>
+      <dt>...</dt>
+      <dd>extra arguments to allow extension and passed
+  to a suitable S4 method <code>.getRNG</code> or
+  <code>.setRNG</code>.</dd>
+      <dt>num.ok</dt>
+      <dd>logical that indicates if single numeric
+  (not integer) RNG data should be considered as a valid
+  RNG seed (<code>TRUE</code>) or passed to
+  <code><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></code> into a proper RNG seed
+  (<code>FALSE</code>) (See details and examples).</dd>
+      <dt>extract</dt>
+      <dd>logical that indicates if embedded RNG
+  data should be looked for and extracted (<code>TRUE</code>) or
+  if the object itself should be considered as an RNG
+  specification.</dd>
+      <dt>recursive</dt>
+      <dd>logical that indicates if embedded RNG
+  data should be extracted recursively (<code>TRUE</code>) or
+  only once (<code>FASE</code>).</dd>
+      <dt>ndraw</dt>
+      <dd>number of draws to perform before returning
+  the RNG seed.</dd>
+      <dt>check</dt>
+      <dd>logical that indicates if only valid RNG
+  kinds should be accepted, or if invalid values should
+  just throw a warning. Note that this argument is used
+  only on R >= 3.0.2.</dd>
+      <dt>verbose</dt>
+      <dd>a logical that indicates if the new RNG
+  settings should be displayed.</dd>
+    </dl>
+    
+    <div class="Value">
+      <h2>Value</h2>
+      
+      <p><code>getRNG</code>, <code>getRNG1</code>, <code>nextRNG</code> and
+  <code>setRNG</code> usually return an integer vector of length
+  > 2L, like <code><a href='http://www.inside-r.org/r-doc/base/Random'>.Random.seed</a></code>.</p>
+  
+      <p><code>getRNG</code> and <code>getRNG1</code> return <code>NULL</code> if no
+  RNG data was found.</p>
+  
+      <p><code>setRNG</code> invisibly returns the old RNG settings as
+  they were before changing them.</p>
+  
+    </div>
+
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>This function handles single number RNG specifications in
+  the following way: <ol>
+<li>integersReturn them
+  unchanged, considering them as encoded RNG kind
+  specification (see <code><a href='http://www.inside-r.org/r-doc/base/Random'>RNG</a></code>). No validity check
+  is performed. </li>
+<li>real numbersIf <code>num.ok=TRUE</code>
+  return them unchanged. Otherwise, consider them as
+  (pre-)seeds and pass them to <code><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></code> to
+  get a proper RNG seed. Hence calling <code>getRNG(1234)</code>
+  is equivalent to <code>set.seed(1234); getRNG()</code> (See
+  examples).  </li>
+</ol></p>
+  
+      <p>Think of a sequence of separate computations, from which
+  only one result is used for the result (e.g. the one that
+  maximises a likelihood): <code>getRNG1</code> would return the
+  RNG settings to reproduce the complete sequence of
+  computations, while <code>getRNG</code> would return the RNG
+  settings necessary to reproduce only the computation
+  whose result has maximum likelihood.</p>
+  
+    </div>
+
+    <div class="Methods">
+      <h2>Methods</h2>
+      
+      <p><ol>
+<li>.getRNG<code>signature(object = "ANY")</code>: Default
+  method that tries to extract RNG information from
+  <code>object</code>, by looking sequentially to a slot named
+  <code>'rng'</code>, a slot named <code>'rng.seed'</code> or an
+  attribute names <code>'rng'</code>.</p>
+  
+      <p>It returns <code>NULL</code> if no RNG data was found.</p>
+  
+      <p></li>
+<li>.getRNG<code>signature(object = "missing")</code>:
+  Returns the current RNG settings.</p>
+  
+      <p></li>
+<li>.getRNG<code>signature(object = "list")</code>: Method
+  for S3 objects, that aims at reproducing the behaviour of
+  the function <code>getRNG</code> of the package <code>getRNG</code>.</p>
+  
+      <p>It sequentially looks for RNG data in elements
+  <code>'rng'</code>, <code>noise$rng</code> if element <code>'noise'</code>
+  exists and is a <code>list</code>, or in attribute
+  <code>'rng'</code>.</p>
+  
+      <p></li>
+<li>.getRNG<code>signature(object = "numeric")</code>:
+  Method for numeric vectors, which returns the object
+  itself, coerced into an integer vector if necessary, as
+  it is assumed to already represent a value for
+  <code><a href='http://www.inside-r.org/r-doc/base/Random'>.Random.seed</a></code>.</p>
+  
+      <p></li>
+<li>getRNG1<code>signature(object = "ANY")</code>: Default
+  method that is identical to <code>getRNG(object, ...)</code>.</p>
+  
+      <p></li>
+<li>.setRNG<code>signature(object = "character")</code>:
+  Sets the RNG to kind <code>object</code>, assuming is a valid
+  RNG kind: it is equivalent to <code>RNGkind(object, ...</code>.
+  All arguments in <code>...</code> are passed to
+  <code><a href='http://www.inside-r.org/r-doc/base/Random'>RNGkind</a></code>.</p>
+  
+      <p></li>
+<li>.setRNG<code>signature(object = "numeric")</code>: Sets
+  the RNG settings using <code>object</code> directly the new
+  value for <code>.Random.seed</code> or to initialise it with
+  <code><a href='http://www.inside-r.org/r-doc/base/Random'>set.seed</a></code>.</p>
+  
+      <p></li>
+</ol></p>
+  
+      <p></p>
+  
+    </div>
+      </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>getRNG</li><li>.getRNG</li><li>getRNG1</li><li>getRNG1,ANY-method</li><li>getRNG1-methods</li><li>.getRNG,ANY-method</li><li>.getRNG,list-method</li><li>.getRNG-methods</li><li>.getRNG,missing-method</li><li>.getRNG,numeric-method</li><li>hasRNG</li><li>nextRNG</li><li>setRNG</li><li>.setRNG</li><li>.setRNG,character-method</li><li>.setRNG-methods</li><li>.setRNG,numeric-method</li>
+    </ul>
+    <ul>
+      <li>methods</li>
+    </ul> -->
+      
+    <h2>See also</h2>
+    
+  <code><a href='http://www.inside-r.org/r-doc/base/Random'>.Random.seed</a></code>, <code><a href='RNGstr.html'>showRNG</a></code>
+
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

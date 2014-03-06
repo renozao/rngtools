@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>rngtools. rngtools 1.2.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="">
+
+<!-- bootstrap css -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<!-- highlighting css -->
+<link href="css/highlight.css" rel="stylesheet">
+<!-- custom css -->
+<link href="css/staticdocs.css" rel="stylesheet">
+<!-- knitr files -->
+<script src="js/highlight.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<!-- bootstrap javascript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<!-- d3 word cloud -->
+<script src="js/d3.v3.min.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="index.html">rngtools</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav">
+	  <li><a href="PAGE-MAN.html"><span class="glyphicon glyphicon-home"></span> Index</a></li>
+    </ul>
+    <!-- <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>--> 
+    <ul class="nav navbar-nav navbar-right">
+      <li><p class="navbar-text">
+      <span style="font-size:14px" class="label label-primary">Version&nbsp;1.2.4</span>
+      &nbsp;</p></li>
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+    <div class="container">
+      <header>
+        
+      </header>
+      
+      <h1>Utility functions for working with Random Number Generators</h1>
+
+<div class="row">
+  <div class="span8">
+    <div class="description">
+      <h2>Description</h2>
+      
+      <p><p>This package contains a set of functions for working with
+  Random Number Generators (RNGs). In particular, it
+  defines a generic S4 framework for getting/setting the
+  current RNG, or RNG data that are embedded into objects
+  for reproducibility.</p></p>
+  
+    </div>
+    
+    
+    
+    <div class="Details">
+      <h2>Details</h2>
+      
+      <p>Notably, convenient default methods greatly facilitate
+  the way current RNG settings can be changed.</p>
+  
+    </div>
+    
+    <h2 id="examples">Examples</h2>
+    <pre><code class="r">
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]
+</code></pre>
+
+<pre><code class="r">s &lt;- getRNG()
+RNGstr(s)
+</code></pre>
+
+<pre><code>## [1] &quot;403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]&quot;
+</code></pre>
+
+<pre><code class="r">RNGtype(s)
+</code></pre>
+
+<pre><code>## [1] &quot;Mersenne-Twister&quot; &quot;Inversion&quot;
+</code></pre>
+
+<pre><code class="r">
+# get what would be the RNG seed after set.seed
+s &lt;- nextRNG(1234)
+showRNG(s)
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]
+</code></pre>
+
+<pre><code class="r">showRNG( nextRNG(1234, ndraw=10) )
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 10L, ..., 467264024L [b9a4fab9a7ad828dbffae696eef6a31a]
+</code></pre>
+
+<pre><code class="r">
+# change of RNG kind
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 624L, ..., -1896522223L [eacb7c1288e03421d428feb736099548]
+</code></pre>
+
+<pre><code class="r">k &lt;- RNGkind()
+k[2L] &lt;- &#39;Ahrens&#39;
+try( RNGkind(k) )
+setRNG(k)
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Ahrens-Dieter 
+## # RNG state: 103L, 624L, ..., -912150329L [c96e855238c32059d90ca179f9b1b16a]
+</code></pre>
+
+<pre><code class="r"># set encoded kind
+setRNG(501L)
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
+## # RNG state: 501L, -1942268464L, 865946602L
+</code></pre>
+
+<pre><code class="r">
+# use as set seed
+setRNG(1234)
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Marsaglia-Multicarry / Kinderman-Ramage 
+## # RNG state: 501L, -305777535L, -1394370482L
+</code></pre>
+
+<pre><code class="r">r &lt;- getRNG()
+
+# extract embedded RNG specifications
+runif(10)
+</code></pre>
+
+<pre><code>##  [1] 0.02612 0.29453 0.31487 0.41449 0.88494 0.33931 0.43921 0.30835
+##  [9] 0.62447 0.05537
+</code></pre>
+
+<pre><code class="r">setRNG(list(1, rng=1234))
+rng.equal(r)
+</code></pre>
+
+<pre><code>## [1] TRUE
+</code></pre>
+
+<pre><code class="r">
+# restore default RNG (e.g., after errors)
+RNGrecovery()
+showRNG()
+</code></pre>
+
+<pre><code>## # RNG kind:  Mersenne-Twister / Inversion 
+## # RNG state: 403L, 624L, ..., -325092206L [6b9b92cc9debdb741d96ff4ef849aa33]
+</code></pre>
+
+<pre><code class="r">
+</code></pre>
+
+  </div>
+  <div class="span4">
+    <!-- <ul>
+      <li>rngtools</li><li>rngtools-package</li>
+    </ul>
+    <ul>
+      
+    </ul> -->
+      
+        
+  </div>
+</div>
+      
+      <footer>
+      
+<p>Built by <a href="https://github.com/renozao/staticdocs">staticdocs</a>. Styled with <a href="http://twitter.github.com/bootstrap">bootstrap</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

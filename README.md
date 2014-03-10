@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/renozao/rngtools.png?branch=develop)](https://travis-ci.org/renozao/rngtools)
+
 rngtools
 ========
 

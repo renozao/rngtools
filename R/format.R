@@ -190,7 +190,7 @@ RNGinfo <- function(object=getRNG(), ...){
 #' package.
 #' 
 #' @param x,y objects from which RNG settings are extracted.
-#' @param ... extra arguments passed to \code{\link{rng.equal}}.
+#' @param ... extra arguments passed to \code{\link[RUnit]{checkTrue}}.
 #' 
 #' @export
 #' @rdname uchecks

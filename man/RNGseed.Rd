@@ -8,14 +8,14 @@
   RNGrecovery()
 }
 \arguments{
-  \item{seed}{an RNG seed, i.e. an integer vector. No
-  validity check is performed, so it \strong{must} be a
-  valid seed.}
+  \item{seed}{an RNG seed, i.e. an integer vector.
+No validity check is performed, so it \strong{must} be a
+valid seed.}
 }
 \value{
-  invisibly the current RNG seed when called with no
-  arguments, or the -- old -- value of the seed before
-  changing it to \code{seed}.
+  invisibly the current RNG seed when called with no arguments,
+or the -- old -- value of the seed before changing it to
+\code{seed}.
 }
 \description{
   \code{RNGseed} directly gets/sets the current RNG seed
@@ -28,6 +28,10 @@
   defaults.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 # get current seed
 RNGseed()
 # directly set seed

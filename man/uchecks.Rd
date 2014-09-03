@@ -5,11 +5,9 @@
   checkRNG(x, y = getRNG(), ...)
 }
 \arguments{
-  \item{x,y}{objects from which RNG settings are
-  extracted.}
+  \item{x,y}{objects from which RNG settings are extracted.}
 
-  \item{...}{extra arguments passed to
-  \code{\link{rng.equal}}.}
+  \item{...}{extra arguments passed to \code{\link[RUnit]{checkTrue}}.}
 }
 \description{
   \code{checkRNG} checks if two objects have the same RNG
@@ -17,6 +15,10 @@
   \pkg{RUnit} package.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 # check for differences in RNG
 set.seed(123)
 checkRNG(123)

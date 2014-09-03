@@ -13,8 +13,8 @@
   \item{y}{object from which RNG settings are extracted}
 }
 \value{
-  \code{rng.equal} and \code{rng.equal1} return a
-  \code{TRUE} or \code{FALSE}.
+  \code{rng.equal} and \code{rng.equal1} return a \code{TRUE} or
+\code{FALSE}.
 }
 \description{
   \code{rng.equal} compares the RNG settings associated

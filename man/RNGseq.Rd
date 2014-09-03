@@ -11,33 +11,28 @@
 \arguments{
   \item{n}{Number of streams to be created}
 
-  \item{seed}{seed specification used to initialise the set
-  of streams using \code{\link{RNGseq_seed}}.}
+  \item{seed}{seed specification used to initialise the set of streams
+using \code{\link{RNGseq_seed}}.}
 
-  \item{simplify}{a logical that specifies if sequences of
-  length 1 should be unlisted and returned as a single
-  vector.}
+  \item{simplify}{a logical that specifies if sequences of length 1 should be
+unlisted and returned as a single vector.}
 
-  \item{...}{extra arguments passed to
-  \code{\link{RNGseq_seed}}.}
+  \item{...}{extra arguments passed to \code{\link{RNGseq_seed}}.}
 
-  \item{normal.kind}{Type of Normal random generator. See
-  \code{\link{RNG}}.}
+  \item{normal.kind}{Type of Normal random generator. See \code{\link{RNG}}.}
 
   \item{verbose}{logical to toggle verbose messages}
 
-  \item{version}{version of the function to use, to
-  reproduce old behaviours. Version 1 had a bug which made
-  the generated stream sequences share most of their seeds
-  (!), as well as being not equivalent to calling
-  \code{set.seed(seed); RNGseq_seed(NULL)}. Version 2 fixes
-  this bug.}
+  \item{version}{version of the function to use, to reproduce old behaviours.
+Version 1 had a bug which made the generated stream sequences share most of their
+seeds (!), as well as being not equivalent to calling \code{set.seed(seed); RNGseq_seed(NULL)}.
+Version 2 fixes this bug.}
 }
 \value{
-  a list of integer vectors (or a single integer vector if
-  \code{n=1} and \code{unlist=TRUE}).
+  a list of integer vectors (or a single integer  vector if
+\code{n=1} and \code{unlist=TRUE}).
 
-  a 7-length numeric vector.
+a 7-length numeric vector.
 }
 \description{
   Create a given number of seeds for L'Ecuyer's RNG, that
@@ -60,6 +55,13 @@
   should not affect the current RNG state.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
+#----------
+# RNGseq
+#----------
 RNGseq(3)
 RNGseq(3)
 RNGseq(3, seed=123)
@@ -74,6 +76,10 @@ stopifnot( identical(RNGseq(3), RNGseq(3, seed=123)) )
 RNGseq(3, seed=1:6, verbose=TRUE)
 # select Normal kind
 RNGseq(3, seed=123, normal.kind="Ahrens")
+
+#----------
+# RNGseq_seed
+#----------
 ## generate a seed for RNGseq
 # random
 RNGseq_seed()

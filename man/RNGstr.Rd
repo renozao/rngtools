@@ -17,30 +17,27 @@
   RNGdigest(object = getRNG())
 }
 \arguments{
-  \item{object}{RNG seed (i.e. an integer vector), or an
-  object that contains embedded RNG data. For
-  \code{RNGtype} this must be either a valid RNG seed or a
-  single integer that must be a valid encoded RNG kind (see
-  \code{\link{RNGkind}}).}
+  \item{object}{RNG seed (i.e. an integer vector), or an object that contains
+embedded RNG data.
+For \code{RNGtype} this must be either a valid RNG seed or a single integer that
+must be a valid encoded RNG kind (see \code{\link{RNGkind}}).}
 
   \item{n}{maximum length for a seed to be showed in full.
-  If the seed has length greater than \code{n}, then only
-  the first three elements are shown and a digest hash of
-  the complete seed is appended to the string.}
+If the seed has length greater than \code{n}, then only the first three elements
+are shown and a digest hash of the complete seed is appended to the string.}
 
-  \item{provider}{logical that indicates if the library
-  that provides the RNG should also be returned as a third
-  element.}
+  \item{provider}{logical that indicates if the library that provides the RNG
+should also be returned as a third element.}
 
-  \item{indent}{character string to use as indentation
-  prefix in the output from \code{showRNG}.}
+  \item{indent}{character string to use as indentation prefix in the output
+from \code{showRNG}.}
 
   \item{...}{extra arguments passed to \code{RNGtype}.}
 }
 \value{
   a single character string
 
-  \code{RNGtype} returns a 2 or 3-long character vector.
+\code{RNGtype} returns a 2 or 3-long character vector.
 }
 \description{
   These functions retrieve/prints formated information
@@ -79,6 +76,13 @@
   plus a digest hash of the complete seed.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
+#----------
+# RNGstr
+#----------
 # default is a 626-long integer
 RNGstr()
 # what would be the seed after seeding with set.seed(1234)
@@ -87,6 +91,10 @@ RNGstr(1234)
 RNGstr(c(401L, 1L, 1L))
 # no validity check is performed
 RNGstr(2:3)
+
+#----------
+# RNGtype
+#----------
 # get RNG type
 RNGtype()
 RNGtype(provider=TRUE)
@@ -96,6 +104,10 @@ RNGtype(1:3)
 RNGtype(107L)
 # this is different from the following which treats 107 as a seed for set.seed
 RNGtype(107)
+
+#----------
+# showRNG
+#----------
 showRNG()
 # as after set.seed(1234)
 showRNG(1234)
@@ -107,11 +119,19 @@ showRNG(1:3)
 # this does not change the current RNG
 showRNG()
 showRNG(provider=TRUE)
+
+#----------
+# RNGinfo
+#----------
 # get info as a list
 RNGinfo()
 RNGinfo(provider=TRUE)
 # from encoded RNG kind
 RNGinfo(107)
+
+#----------
+# RNGdigest
+#----------
 # compute digest hash from RNG settings
 RNGdigest()
 RNGdigest(1234)

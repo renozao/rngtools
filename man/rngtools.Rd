@@ -8,6 +8,14 @@
   Random Number Generators (RNGs). In particular, it
   defines a generic S4 framework for getting/setting the
   current RNG, or RNG data that are embedded into objects
+  for reproducibility. Notably, convenient default methods
+  greatly facilitate the way current RNG settings can be
+  changed.
+
+  This package contains a set of functions for working with
+  Random Number Generators (RNGs). In particular, it
+  defines a generic S4 framework for getting/setting the
+  current RNG, or RNG data that are embedded into objects
   for reproducibility.
 }
 \details{
@@ -15,6 +23,10 @@
   the way current RNG settings can be changed.
 }
 \examples{
+\dontshow{# roxygen generated flag
+options(R_CHECK_RUNNING_EXAMPLES_=TRUE)
+}
+
 showRNG()
 s <- getRNG()
 RNGstr(s)
@@ -49,5 +61,10 @@ rng.equal(r)
 # restore default RNG (e.g., after errors)
 RNGrecovery()
 showRNG()
+}
+\author{
+  Renaud Gaujoux
+
+Maintainer: Renaud Gaujoux <renaud@tx.technion.ac.il>
 }
 

@@ -163,6 +163,7 @@ showRNG <- function(object=getRNG(), indent='#', ...){
 #' 
 #' @param ... extra arguments passed to \code{RNGtype}.
 #'  
+#' @importFrom stats setNames
 #' @export
 #' @rdname RNGstr
 #' 

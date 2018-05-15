@@ -30,6 +30,7 @@
 #' @return a list of integer vectors (or a single integer  vector if 
 #' \code{n=1} and \code{unlist=TRUE}).
 #' 
+#' @importFrom parallel nextRNGStream
 #' @export 
 #' @examples
 #' 
@@ -50,7 +51,6 @@
 #' 
 RNGseq <- function(n, seed=NULL, ..., simplify=TRUE, version=2){
 	
-	library(parallel)
 	# check parameters
 	if( n <= 0 )
 		stop("NMF::createStream - invalid value for 'n' [positive value expected]")
@@ -111,6 +111,7 @@ RNGseq <- function(n, seed=NULL, ..., simplify=TRUE, version=2){
 #' @return a 7-length numeric vector.
 #' @seealso \code{\link{RNGseq}}
 #' 
+#' @importFrom stats runif
 #' @rdname RNGseq
 #' @export
 #' @examples 

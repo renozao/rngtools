@@ -18,13 +18,12 @@
 # Creation: 08 Nov 2011
 ###############################################################################
 
-library(pkgmaker)
-
 ###% Returns all the libraries that provides a user-supplied RNG
 ###% 
 ###% The library that provides the wrapper hooks for the management multiple 
 ###% user-supplied RNG is removed from the output list.
 ###% 
+#' @importFrom utils tail
 RNGlibs <- function(n=0, full=FALSE, hook="user_unif_rand", unlist=TRUE){
 	dlls <- getLoadedDLLs()
 	res <- lapply(dlls, function(d){
@@ -428,6 +427,7 @@ nextRNG <- function(object, ..., ndraw=0L){
 	res
 }
 
+#' @importFrom utils head
 .collapse <- function(x, sep=', ', n=7L){
 	
 	res <- paste(head(x, n), collapse=', ')

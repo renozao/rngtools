@@ -20,9 +20,11 @@ Depends:
     pkgmaker (>= 0.20)
 Imports:
     stringr,
-    digest
+    digest,
+    utils,
+    stats,
+    parallel
 Suggests:
-    parallel,
     RUnit,
     knitr
 Collate:

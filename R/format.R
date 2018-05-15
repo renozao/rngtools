@@ -7,14 +7,17 @@
 #' 
 #' These functions retrieve/prints formated information about RNGs.
 #' 
-#' All functions can retrieve can be called with objects that are -- valid -- 
+#' All functions can be called with objects that are -- valid -- 
 #' RNG seeds or contain embedded RNG data, but none of them change the current 
 #' RNG setting.
 #' To effectively change the current settings on should use \code{\link{setRNG}}.
 #' 
-#' \code{RNGstr} returns a description of an RNG seed as a single character string.
+#' @name RNGstr
+NULL
+
+#' @describeIn RNGstr returns a description of an RNG seed as a single character string.
 #' 
-#' \code{RNGstr} formats seeds by collapsing them in a comma separated string.
+#' It formats seeds by collapsing them in a comma separated string.
 #' By default, seeds that contain more than 7L integers, have their 3 first values 
 #' collapsed plus a digest hash of the complete seed.
 #' 
@@ -65,9 +68,9 @@ RNGstr <- function(object, n=7L, ...){
 		paste(class(seed), ' [', digest(seed), ']', sep='')
 }
 
-#' \code{RNGtype} extract the kinds of RNG and Normal RNG.
+#' @describeIn RNGstr extract the kinds of RNG and Normal RNG.
 #'  
-#' \code{RNGtype} returns the same type of values as \code{RNGkind()} (character strings), 
+#' It returns the same type of values as \code{RNGkind()} (character strings), 
 #' except that it can extract the RNG settings from an object.
 #' If \code{object} is missing it returns the kinds of the current RNG settings, 
 #' i.e. it is identical to \code{RNGkind()}.
@@ -78,8 +81,6 @@ RNGstr <- function(object, n=7L, ...){
 #' @return \code{RNGtype} returns a 2 or 3-long character vector.
 #' 
 #' @export
-#' @rdname RNGstr
-#' 
 #' @examples
 #' 
 #' # get RNG type
@@ -121,15 +122,13 @@ RNGtype <- function(object, ..., provider=FALSE){
 	res
 }
 
-#' \code{showRNG} displays human readable information about RNG settings.
+#' @describeIn RNGstr displays human readable information about RNG settings.
 #' If \code{object} is missing it displays information about the current RNG.
 #' 
 #' @param indent character string to use as indentation prefix in the output 
 #' from \code{showRNG}.
 #' 
 #' @export
-#' @rdname RNGstr
-#' 
 #' @examples
 #' showRNG()
 #' # as after set.seed(1234)
@@ -158,14 +157,13 @@ showRNG <- function(object=getRNG(), indent='#', ...){
 	cat(indent, "RNG state:", RNGstr(object), "\n")
 } 
 
-#' \code{RNGinfo} is equivalent to \code{RNGtype} but returns a named 
+#' @describeIn RNGstr is equivalent to \code{RNGtype} but returns a named 
 #' list instead of an unnamed character vector.
 #' 
 #' @param ... extra arguments passed to \code{RNGtype}.
 #'  
+#' @importFrom stats setNames
 #' @export
-#' @rdname RNGstr
-#' 
 #' @examples
 #' # get info as a list
 #' RNGinfo()
@@ -190,7 +188,7 @@ RNGinfo <- function(object=getRNG(), ...){
 #' package.
 #' 
 #' @param x,y objects from which RNG settings are extracted.
-#' @param ... extra arguments passed to \code{\link{rng.equal}}.
+#' @param ... extra arguments passed to \code{\link[RUnit]{checkTrue}}.
 #' 
 #' @export
 #' @rdname uchecks
@@ -203,6 +201,10 @@ RNGinfo <- function(object=getRNG(), ...){
 #' try( checkRNG(123, 1:3) )
 #' 
 checkRNG <- function(x, y=getRNG(), ...){
-	requireRUnit()
-	checkTrue(rng.equal(x, y), ...)
+  if( !requireNamespace('RUnit') ){
+    stop("Missing Suggests dependency: package 'RUnit' is required to check RNG in unit tests.")
+    
+  }
+  RUnit::checkTrue(rng.equal(x, y), ...)
+  
 }

@@ -18,13 +18,12 @@
 # Creation: 08 Nov 2011
 ###############################################################################
 
-library(pkgmaker)
-
 ###% Returns all the libraries that provides a user-supplied RNG
 ###% 
 ###% The library that provides the wrapper hooks for the management multiple 
 ###% user-supplied RNG is removed from the output list.
 ###% 
+#' @importFrom utils tail
 RNGlibs <- function(n=0, full=FALSE, hook="user_unif_rand", unlist=TRUE){
 	dlls <- getLoadedDLLs()
 	res <- lapply(dlls, function(d){
@@ -110,7 +109,12 @@ RNGprovider <- function(kind=RNGkind(), user.supplied=FALSE){
 
 #' Directly Getting or Setting the RNG Seed
 #' 
-#' \code{RNGseed} directly gets/sets the current RNG seed \code{.Random.seed}.
+#' These functions provide a direct access to the RNG seed object `.Random.seed`.
+#' 
+#' @name RNGseed
+NULL
+
+#' @describeIn RNGseed directly gets/sets the current RNG seed \code{.Random.seed}.
 #' It can typically be used to backup and restore the RNG state on exit of 
 #' functions, enabling local RNG changes.
 #' 
@@ -170,15 +174,15 @@ RNGseed <- function(seed){
 	invisible(res)
 }
 
-#' \code{RNGrecovery} recovers from a broken state of \code{.Random.seed}, 
+#' @describeIn RNGseed recovers from a broken state of \code{.Random.seed}, 
 #' and reset the RNG settings to defaults.
 #' 
 #' @export
-#' @rdname RNGseed
 RNGrecovery <- function(){
 	s <- as.integer(c(401,0,0))
 	assign(".Random.seed", s, envir=.GlobalEnv)
 	RNGkind("default", "default")
+  
 }
 
 .getRNGattribute <- function(object){
@@ -290,15 +294,17 @@ hasRNG <- function(object){
 	!is.null(.getRNGattribute(object))
 } 
 
+#' Getting RNG Seeds
+#' 
 #' \code{.getRNG} is an S4 generic that extract RNG settings from a variety of 
 #' object types.
 #' Its methods define the workhorse functions that are called by \code{getRNG}.
 #' 
-#' @rdname rng
-#' @inline
+#' @inheritParams getRNG
 #' @export
 setGeneric('.getRNG', function(object, ...) standardGeneric('.getRNG') )
-#' Default method that tries to extract RNG information from \code{object}, by 
+
+#' @describeIn .getRNG Default method that tries to extract RNG information from \code{object}, by 
 #' looking sequentially to a slot named \code{'rng'}, a slot named \code{'rng.seed'}
 #' or an attribute names \code{'rng'}.
 #' 
@@ -308,7 +314,7 @@ setMethod('.getRNG', 'ANY',
 		.getRNGattribute(object)
 	}
 )
-#' Returns the current RNG settings.
+#' @describeIn .getRNG Returns the current RNG settings.
 setMethod('.getRNG', 'missing',
 	function(object){
 		
@@ -322,7 +328,7 @@ setMethod('.getRNG', 'missing',
 	}
 )
 
-#' Method for S3 objects, that aims at reproducing the behaviour of the function 
+#' @describeIn .getRNG Method for S3 objects, that aims at reproducing the behaviour of the function 
 #' \code{getRNG} of the package \code{getRNG}. 
 #' 
 #' It sequentially looks for RNG data in elements \code{'rng'}, \code{noise$rng} 
@@ -341,7 +347,7 @@ setMethod('.getRNG', 'list',
 #			object	
 #		}
 #)
-#' Method for numeric vectors, which returns the object itself, coerced into an integer 
+#' @describeIn .getRNG Method for numeric vectors, which returns the object itself, coerced into an integer 
 #' vector if necessary, as it is assumed to already represent a value for 
 #' \code{\link{.Random.seed}}.
 #' 
@@ -351,9 +357,11 @@ setMethod('.getRNG', 'numeric',
 	}
 )
 
+#' Extracting RNG Settings from Computation Result Objects
+#' 
 #' \code{getRNG1} is an S4 generic that returns the \strong{initial} RNG settings 
 #' used for computing an object.
-#' For example, in the case of results from multiple model fies, it would 
+#' For example, in the case of results from multiple model fits, it would 
 #' return the RNG settings used to compute the \emph{first} fit.
 #' 
 #' \code{getRNG1} is defined to provide separate access to the RNG settings as 
@@ -362,17 +370,17 @@ setMethod('.getRNG', 'numeric',
 #' result only.
 #' 
 #' Think of a sequence of separate computations, from which only one result is 
-#' used for the result (e.g. the one that maximises a likelihood): 
+#' used for the result (e.g. the one that maximizes a likelihood): 
 #' \code{getRNG1} would return the RNG settings to reproduce the complete sequence
 #' of computations, while \code{getRNG} would return the RNG settings necessary to 
 #' reproduce only the computation whose result has maximum likelihood.  
 #' 
-#' @rdname rng
-#' @export
-#' @inline
+#' @param object an R object.
+#' @param ... extra arguments to allow extension.
 #' 
+#' @export
 setGeneric('getRNG1', function(object, ...) standardGeneric('getRNG1') )
-#' Default method that is identical to \code{getRNG(object, ...)}.
+#' @describeIn getRNG1 Default method that is identical to \code{getRNG(object, ...)}.
 setMethod('getRNG1', 'ANY',
 	function(object, ...){
 		getRNG(object, ...)
@@ -428,6 +436,7 @@ nextRNG <- function(object, ..., ndraw=0L){
 	res
 }
 
+#' @importFrom utils head
 .collapse <- function(x, sep=', ', n=7L){
 	
 	res <- paste(head(x, n), collapse=', ')
@@ -439,6 +448,9 @@ nextRNG <- function(object, ..., ndraw=0L){
 #' \code{setRNG} set the current RNG with a seed, 
 #' using a suitable \code{.setRNG} method to set these settings.
 #'
+#' @param verbose a logical that indicates if the new RNG settings should
+#' be displayed.
+#' 
 #' @param check logical that indicates if only valid RNG kinds should be
 #' accepted, or if invalid values should just throw a warning.
 #' Note that this argument is used only on R >= 3.0.2.
@@ -495,20 +507,18 @@ setRNG <- function(object, ..., verbose=FALSE, check = TRUE){
 	invisible(orseed)
 }
 
+#' Setting RNG Seeds
+#' 
 #' \code{.setRNG} is an S4 generic that sets the current RNG settings, from a 
 #' variety of specifications.
 #' Its methods define the workhorse functions that are called by \code{setRNG}.
 #' 
-#' @inline
-#' @rdname rng
+#' @inheritParams setRNG
 #' @export 
 setGeneric('.setRNG', function(object, ...) standardGeneric('.setRNG') )
-#' Sets the RNG to kind \code{object}, assuming is a valid RNG kind:
+#' @describeIn .setRNG Sets the RNG to kind \code{object}, assuming is a valid RNG kind:
 #' it is equivalent to \code{RNGkind(object, ...}.
 #' All arguments in \code{...} are passed to \code{\link{RNGkind}}.
-#' 
-#' @param verbose a logical that indicates if the new RNG settings should
-#' be displayed.
 #' 
 #' @examples
 #' # set RNG kind
@@ -524,7 +534,7 @@ setMethod('.setRNG', 'character',
 	}
 )
 
-#' Sets the RNG settings using \code{object} directly the new value for 
+#' @describeIn .setRNG Sets the RNG settings using \code{object} directly the new value for 
 #' \code{.Random.seed} or to initialise it with \code{\link{set.seed}}.
 #' 
 #' @examples 

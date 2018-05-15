@@ -204,6 +204,10 @@ RNGinfo <- function(object=getRNG(), ...){
 #' try( checkRNG(123, 1:3) )
 #' 
 checkRNG <- function(x, y=getRNG(), ...){
-	requireRUnit()
-	checkTrue(rng.equal(x, y), ...)
+  if( !requireNamespace('RUnit') ){
+    stop("Missing Suggests dependency: package 'RUnit' is required to check RNG in unit tests.")
+    
+  }
+  RUnit::checkTrue(rng.equal(x, y), ...)
+  
 }

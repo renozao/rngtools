@@ -1,6 +1,6 @@
 Package: rngtools
 Authors@R: person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre"))
-Version: 1.3
+Version: 1.3.1
 License: GPL-3
 Title: Utility Functions for Working with Random Number Generators
 Description: Provides a set of functions for working with
@@ -24,13 +24,11 @@ Imports:
     parallel
 Suggests:
     RUnit,
-    knitr,
     testthat
 Collate:
     'rngtools-package.r'
     'format.R'
     'RNG.R'
     'RNGseq.R'
-VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE, roclets = c('collate', 'namespace', 'roclets::rd2_roclet') )
 RoxygenNote: 6.0.1.9000

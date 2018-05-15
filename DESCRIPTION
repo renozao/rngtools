@@ -1,7 +1,6 @@
 Package: rngtools
-Maintainer: Renaud Gaujoux <renozao@protonmail.com>
-Author: Renaud Gaujoux
-Version: 1.2.5
+Authors@R: person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre"))
+Version: 1.2.6
 License: GPL-3
 Title: Utility Functions for Working with Random Number Generators
 Description: Provides a set of functions for working with
@@ -13,7 +12,6 @@ Description: Provides a set of functions for working with
 URL: https://renozao.github.io/rngtools
 BugReports: http://github.com/renozao/rngtools/issues
 Encoding: UTF-8
-SCM: github:renozao, r-forge
 Depends:
     R (>= 3.0.0),
     methods,

@@ -33,3 +33,5 @@ Collate:
     'RNG.R'
     'RNGseq.R'
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE, roclets = c('collate', 'namespace', 'roclets::rd2_roclet') )
+RoxygenNote: 6.0.1.9000

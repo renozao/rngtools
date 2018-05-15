@@ -3,9 +3,12 @@
 # Author: Renaud Gaujoux
 ###############################################################################
 
-library(stringr)
+context("Get/Set RNG")
 
-test.getRNG <- function(){
+library(stringr)
+library(pkgmaker)
+
+test_that('getRNG', {
 
 	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
@@ -24,8 +27,8 @@ test.getRNG <- function(){
 		}
 		newRNG <- RNGseed()
 		.msg <- function(x) paste(cl, ':', x, '[', msg, ']')
-		checkIdentical(oldRNG, newRNG, .msg("does not change RNG"))
-		checkIdentical(d, y, .msg("result is correct") )
+		expect_identical(oldRNG, newRNG, .msg("does not change RNG"))
+    expect_identical(d, y, .msg("result is correct") )
 	}
 	
 	set.seed(123456)
@@ -40,9 +43,9 @@ test.getRNG <- function(){
 	checker(1L, 1L, msg="Single integer = Encoded RNG kind: returns it unchanged")
 	checker(1000L, 1000L, msg="Invalid single integer = Encoded RNG kind: returns it unchanged")
 	
-}
+})
 
-test.setRNG <- function(){
+test_that('setRNG', {
 	
 	RNGkind('default', 'default')
 	on.exit( RNGrecovery() )
@@ -57,9 +60,9 @@ test.setRNG <- function(){
 		newRNG <- RNGseed()
 		
 		msg <- function(x, ...) paste(tset, ':', ...)
-		checkTrue(!identical(oldRNG, newRNG), msg("changes RNG"))
-		checkIdentical(getRNG(), y, msg("RNG is correctly set") )
-		checkIdentical(d, oldRNG, msg("returns old RNG") )
+		expect_true(!identical(oldRNG, newRNG), msg("changes RNG"))
+    expect_identical(getRNG(), y, msg("RNG is correctly set") )
+    expect_identical(d, oldRNG, msg("returns old RNG") )
 	}
 	
 	set.seed(123456)
@@ -107,27 +110,27 @@ test.setRNG <- function(){
 	checker(setRNG(refseed), refseed, "numeric vector: directly set seed")
 	
 	refseed <- .Random.seed
-	checkException( setRNG(2:3), "numeric vector: throws an error if invalid value for .Random.seed")
-	checkIdentical( .Random.seed, refseed, ".Random.seed is not changed in case of an error in setRNG")
+	expect_error( setRNG(2:3), info = "numeric vector: throws an error if invalid value for .Random.seed")
+  expect_identical( .Random.seed, refseed, ".Random.seed is not changed in case of an error in setRNG")
     
     oldRNG <- getRNG()
-    checkException(setRNG(1234L), "Error with invalid integer seed")
-    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
-    checkException(setRNG(123L), "Error with invalid RNG kind")
-    checkIdentical(oldRNG, getRNG(), "RNG still valid after error")
+    expect_error(setRNG(1234L), info = "Error with invalid integer seed")
+    expect_identical(oldRNG, getRNG(), "RNG still valid after error")
+    expect_error(setRNG(123L), info = "Error with invalid RNG kind")
+    expect_identical(oldRNG, getRNG(), "RNG still valid after error")
 
     # changes in R >= 3.0.2: invalid seeds only throw warning
     if( testRversion('> 3.0.1') ){
         oldRNG <- getRNG()
-        checkWarning(setRNG(1234L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
-                        , "Invalid integer kind: Warning only if check = FALSE")
-        checkIdentical(1234L, getRNG(), "RNG has new invalid integer value")
+        expect_warning(setRNG(1234L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
+                        , info = "Invalid integer kind: Warning only if check = FALSE")
+        expect_identical(1234L, getRNG(), "RNG has new invalid integer value")
         setRNG(oldRNG)
-        checkWarning(setRNG(123L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
-                        , "Invalid kind: Warning only if check = FALSE")
-        checkIdentical(123L, getRNG(), "RNG has new invalid RNG kind")
+        expect_warning(setRNG(123L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
+                        , info = "Invalid kind: Warning only if check = FALSE")
+        expect_identical(123L, getRNG(), "RNG has new invalid RNG kind")
                                                 
     }
 	
-}
+})
 

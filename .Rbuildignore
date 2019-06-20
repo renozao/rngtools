@@ -9,3 +9,4 @@ inst/doc/.*\.tex
 ^\.travis\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+revdep

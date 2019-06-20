@@ -7,3 +7,5 @@ vignettes/.*\.tex
 inst/doc/.*\.tex
 ^makefile$
 ^\.travis\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$

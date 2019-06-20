@@ -1,6 +1,6 @@
 # Unit test 
 # 
-# Author: Renaud Gaujoux
+# Author: Renaud Gaujoux (edited by Max Kuhn)
 # Created: 01 May 2018
 # Copyright: Cytoreason (2017)
 ###############################################################################
@@ -9,6 +9,7 @@ context("Formatting functions")
 
 library(stringr)
 library(pkgmaker)
+library(utils)
 
 # RUnit-testthat bridge 
 checkIdentical <- function(x, y, msg){
@@ -68,7 +69,17 @@ test_that('RNGdigest and RNGstr', {
   
 })
 
-checkRNGtype <- function(x, ..., expL=2L){
+checkRNGtype <- function(x, ..., expL = NULL){
+  
+  if(is.null(expL)) {
+    # This switch accounts for the change inthe R RNG that occured in 3.6.0
+    test_ver <- as.character(getRversion())
+    if (compareVersion(test_ver, "3.6.0") > 0) {
+      expL <- 2L
+    } else {
+      expL <- 3L
+    }
+  }
   
   fn <- RNGtype
   oldRNG <- getRNG()

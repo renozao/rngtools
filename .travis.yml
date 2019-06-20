@@ -1,17 +1,19 @@
-# Sample .travis.yml for R projects.
-#
-# See README.md for instructions, or for more configuration options,
-# see the wiki:
-#   https://github.com/craigcitro/r-travis/wiki
-
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 language: r
-sudo: false
-cache: packages
-r:
-  - release
-  - devel
-r_packages:
-  - covr
+
+dist: trusty
+sudo: true
+
 warnings_are_errors: false
+
+r:
+  - 3.2
+  - 3.3
+  - 3.4
+  - 3.5
+  - 3.6
+  - devel
+
 after_success:
   - Rscript -e 'covr::codecov()'
+

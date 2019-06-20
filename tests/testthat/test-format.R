@@ -72,12 +72,12 @@ test_that('RNGdigest and RNGstr', {
 checkRNGtype <- function(x, ..., expL = NULL){
   
   if(is.null(expL)) {
-    # This switch accounts for the change inthe R RNG that occured in 3.6.0
+    # This switch accounts for the change in the R RNG that occured in 3.6.
     test_ver <- as.character(getRversion())
     if (compareVersion(test_ver, "3.6.0") > 0) {
-      expL <- 2L
-    } else {
       expL <- 3L
+    } else {
+      expL <- 2L
     }
   }
   

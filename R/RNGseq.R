@@ -103,13 +103,13 @@ RNGseq <- function(n, seed=NULL, ..., simplify=TRUE, version=2){
 }
 
 # internal wrapper to handle the changes introduced in R 3.6
-RNGkind <- function(..., sample.kind = NULL, strict = TRUE){
+RNGkind <- function(kind = NULL, normal.kind = NULL, sample.kind = NULL, ..., strict = TRUE){
   if( !nargs() ) base::RNGkind()
   else if( testRversion("<3.6.0") ){
     if( !is.null(sample.kind) && strict )
       stop(sprintf("Invalid RNGkind call: argument sample.kind is only supported in R >= 3.6.0 [current version: %s]", Rversion()))
-    base::RNGkind(...)
-  }else base::RNGkind(..., sample.kind = sample.kind)
+    base::RNGkind(kind = kind, normal.kind = normal.kind, ...)
+  }else base::RNGkind(kind = kind, normal.kind = normal.kind, sample.kind = sample.kind, ...)
   
 }
 

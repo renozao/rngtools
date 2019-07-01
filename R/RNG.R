@@ -181,7 +181,7 @@ RNGseed <- function(seed){
 RNGrecovery <- function(){
 	s <- as.integer(c(401,0,0))
 	assign(".Random.seed", s, envir=.GlobalEnv)
-	do.call(RNGkind, as.list(rep("default", RNGkind_length())))
+	do.call(RNGkind, as.list(rep("default", .RNGkind_length())))
   
 }
 
@@ -531,7 +531,7 @@ setMethod('.setRNG', 'character',
 		if( length(object) == 1L )
 			RNGkind(kind=object, ...)
 		else{
-		  n0 <- RNGkind_length()
+		  n0 <- .RNGkind_length()
 		  if( length(object) > n0 ){
 		    warning("RNG character specification is too long: discarding elements ", paste0(tail(object, -n0), collapse = ", "))
 		    

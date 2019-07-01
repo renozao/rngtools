@@ -1,6 +1,8 @@
 Package: rngtools
-Authors@R: person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre"))
-Version: 1.3.1.2
+Authors@R: 
+  c(person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre")),
+    person("Max", "Kuhn", role = "ctb"))
+Version: 1.4
 License: GPL-3
 Title: Utility Functions for Working with Random Number Generators
 Description: Provides a set of functions for working with
@@ -32,4 +34,4 @@ Collate:
     'RNG.R'
     'RNGseq.R'
 Roxygen: list(markdown = TRUE, roclets = c('collate', 'namespace', 'roclets::rd2_roclet') )
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.1

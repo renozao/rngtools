@@ -76,9 +76,11 @@ RNGstr <- function(object, n=7L, ...){
 #' i.e. it is identical to \code{RNGkind()}.
 #' 
 #' @param provider logical that indicates if the library that provides the RNG
-#' should also be returned as a third element.
+#' should also be returned as an extra element.
 #' 
-#' @return \code{RNGtype} returns a 2 or 3-long character vector.
+#' @return \code{RNGtype} returns a named character vector containing the types of the random number generator, which correspond
+#' to the arguments accepted by [base::RNGkind].
+#' Note that starting with R 3.6, the vector has length 3, while in previous R versions it has length 2 (no sample.kind element).
 #' 
 #' @export
 #' @examples
@@ -112,14 +114,24 @@ RNGtype <- function(object, ..., provider=FALSE){
 		setRNG(rng)
 		RNGkind()
 	}
+	# set RNGkind parameter names each element
+	names(res) <- c("kind", "normal.kind", "sample.kind")[1:length(res)]
 	
 	# determine provider if requested
 	if( provider ){
 		prov <- RNGprovider(res)
-		res <- c(res, prov)
+		res <- c(res, provider = prov)
 	}
 	# return result
 	res
+}
+
+
+# Returns the length of RNGkind output
+# This is used in a few places to dynamically adapt to the changes in RNGkind output that were introduced in R 3.6
+.RNGkind_length <- function(){
+  length(RNGkind())
+  
 }
 
 #' @describeIn RNGstr displays human readable information about RNG settings.
@@ -151,8 +163,9 @@ showRNG <- function(object=getRNG(), indent='#', ...){
 			}
 	)
 	# show information
-	cat(indent, "RNG kind: ", paste(info[1:2], collapse=" / ")
-			, if( length(info) > 2L ) paste('[', info[3L], ']', sep='')
+  n0 <- .RNGkind_length()
+	cat(indent, "RNG kind: ", paste(info[1:n0], collapse=" / ")
+			, if( length(info) > n0 ) paste('[', paste0(tail(info, -n0), collapse = ", "), ']', sep='')
 			, "\n")
 	cat(indent, "RNG state:", RNGstr(object), "\n")
 } 
@@ -175,8 +188,7 @@ RNGinfo <- function(object=getRNG(), ...){
 	
 	# get type
 	kind <- RNGtype(object, ...)
-	n <- c('kind', 'normal', 'provider')
-	as.list(setNames(kind, n[1:length(kind)]))
+	as.list(kind)
 	
 }
 

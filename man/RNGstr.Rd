@@ -31,7 +31,7 @@ are shown and a digest hash of the complete seed is appended to the string.}
 \item{...}{extra arguments passed to \code{RNGtype}.}
 
 \item{provider}{logical that indicates if the library that provides the RNG
-should also be returned as a third element.}
+should also be returned as an extra element.}
 
 \item{indent}{character string to use as indentation prefix in the output
 from \code{showRNG}.}
@@ -39,7 +39,9 @@ from \code{showRNG}.}
 \value{
 a single character string
 
-\code{RNGtype} returns a 2 or 3-long character vector.
+\code{RNGtype} returns a named character vector containing the types of the random number generator, which correspond
+to the arguments accepted by \link[base:RNGkind]{base::RNGkind}.
+Note that starting with R 3.6, the vector has length 3, while in previous R versions it has length 2 (no sample.kind element).
 }
 \description{
 These functions retrieve/prints formated information about RNGs.
@@ -73,7 +75,6 @@ list instead of an unnamed character vector.
 }}
 
 \examples{
-#--- RNGstr ---
 
 # default is a 626-long integer
 RNGstr()
@@ -85,8 +86,6 @@ RNGstr(c(401L, 1L, 1L))
 RNGstr(2:3)
 
 
-#--- RNGtype ---
-
 # get RNG type
 RNGtype()
 RNGtype(provider=TRUE)
@@ -97,8 +96,6 @@ RNGtype(107L)
 # this is different from the following which treats 107 as a seed for set.seed
 RNGtype(107)
 
-
-#--- showRNG ---
 showRNG()
 # as after set.seed(1234)
 showRNG(1234)
@@ -111,21 +108,16 @@ showRNG(1:3)
 showRNG()
 showRNG(provider=TRUE)
 
-
-#--- RNGinfo ---
 # get info as a list
 RNGinfo()
 RNGinfo(provider=TRUE)
 # from encoded RNG kind
 RNGinfo(107)
 
-
-#--- RNGdigest ---
 # compute digest hash from RNG settings
 RNGdigest()
 RNGdigest(1234)
 # no validity check is performed
 RNGdigest(2:3)
-
 
 }

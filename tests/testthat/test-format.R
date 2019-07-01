@@ -49,7 +49,7 @@ checkFun <- function(fn, name){
 
 test_that('RNGdigest and RNGstr', {
   
-  RNGkind('default', 'default')
+  RNGkind_default()
   on.exit( RNGrecovery() )
   
   fn <- c('RNGdigest', 'RNGstr')
@@ -69,17 +69,9 @@ test_that('RNGdigest and RNGstr', {
   
 })
 
-checkRNGtype <- function(x, ..., expL = NULL){
-  
-  if(is.null(expL)) {
-    # This switch accounts for the change in the R RNG that occured in 3.6.
-    test_ver <- as.character(getRversion())
-    if (compareVersion(test_ver, "3.6.0") >= 0) {
-      expL <- 3L
-    } else {
-      expL <- 2L
-    }
-  }
+# Note: in R 3.6, RNGkind returns a vector of length 3 (vs 2 in previous versions)
+# Here we set the expected default length according to the runtime version 
+checkRNGtype <- function(x, ..., expL = .RNGkind_length()){
   
   fn <- RNGtype
   oldRNG <- getRNG()

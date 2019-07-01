@@ -10,7 +10,7 @@ library(pkgmaker)
 
 test_that('getRNG', {
 
-	RNGkind('default', 'default')
+	RNGkind_default()
 	on.exit( RNGrecovery() )
 	
 	checker <- function(x, y, ..., msg=NULL, drawRNG=TRUE){
@@ -47,7 +47,7 @@ test_that('getRNG', {
 
 test_that('setRNG', {
 	
-	RNGkind('default', 'default')
+	RNGkind_default()
 	on.exit( RNGrecovery() )
 	
 	checker <- function(x, y, tset, drawRNG=TRUE){

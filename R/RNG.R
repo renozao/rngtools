@@ -181,7 +181,7 @@ RNGseed <- function(seed){
 RNGrecovery <- function(){
 	s <- as.integer(c(401,0,0))
 	assign(".Random.seed", s, envir=.GlobalEnv)
-	RNGkind("default", "default")
+	do.call(RNGkind, as.list(rep("default", RNGkind_length())))
   
 }
 
@@ -516,9 +516,10 @@ setRNG <- function(object, ..., verbose=FALSE, check = TRUE){
 #' @inheritParams setRNG
 #' @export 
 setGeneric('.setRNG', function(object, ...) standardGeneric('.setRNG') )
-#' @describeIn .setRNG Sets the RNG to kind \code{object}, assuming is a valid RNG kind:
-#' it is equivalent to \code{RNGkind(object, ...}.
-#' All arguments in \code{...} are passed to \code{\link{RNGkind}}.
+#' @describeIn .setRNG Sets the RNG to the kind(s) specified in \code{object}.
+#' If object is a single string that is a valid RNG kind, then this method is equivalent to \code{RNGkind(object, ...}.
+#' Otherwise, each element is assumed to be a valid argument for [RNGkind].
+#' Note that this latter case the names of `object`, if any, are used as argument names in the call to [RNGkind]. 
 #' 
 #' @examples
 #' # set RNG kind
@@ -529,8 +530,15 @@ setMethod('.setRNG', 'character',
 	function(object, ...){
 		if( length(object) == 1L )
 			RNGkind(kind=object, ...)
-		else
-			RNGkind(kind=object[1L], normal.kind=object[2L])
+		else{
+		  n0 <- RNGkind_length()
+		  if( length(object) > n0 ){
+		    warning("RNG character specification is too long: discarding elements ", paste0(tail(object, -n0), collapse = ", "))
+		    
+		  }
+			do.call(RNGkind, as.list(head(object, n0)))
+		  
+		}
 	}
 )
 

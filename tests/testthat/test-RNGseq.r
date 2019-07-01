@@ -30,7 +30,7 @@ test_that('RNGseq_seed', {
 		on.exit(RNGseed(os))
 		
 		# default RNG
-		RNGkind('default')
+		RNGkind_default()
 		if( !is.null(ss) ) set.seed(ss)
 		s1 <- .test_loc(paste(.msg, '- default'), ..., .change=Dchange)
 		
@@ -44,7 +44,7 @@ test_that('RNGseq_seed', {
 	os <- RNGseed()
 	on.exit(RNGseed(os))
 	
-	RNGkind('default', 'default')
+	RNGkind_default()
 	
 	# test different arguments
 	s1 <- .test("seed=missing", ss=1, Dchange=TRUE, Lchange=FALSE)

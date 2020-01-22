@@ -15,8 +15,28 @@ isInteger <- function(x){
 	is.integer(x) && length(x) == 1
 }
 
-# from pkgmaker 0.30
+# adapted from pkgmaker 0.30
 testRversion <- function(x, test=1L){
+  # emulate stringr functions
+  str_trim <- function(x) sub("^ *(.*[^ ]) *$", "\\1", x)
+  str_match <- function(x, pattern, n){
+    r <- regexpr(pattern, x, perl = TRUE)
+    start <- attr(r, "capture.start")
+    len <- attr(r, "capture.length")
+    res <- sapply(seq(nrow(start)), FUN = function(i){
+      s <- start[i, ]
+      if( s[1L] < 0 ) return(rep(NA_character_, length(s) + 1L))
+      hit <- sapply(seq_along(s), function(j){
+        s <- s[j]
+        substr(x[i], s, s + len[i, j] - 1L)
+      })
+      c(x[i], hit)
+      
+    })
+    t(res)
+  }
+  ##
+  
 	rv <- Rversion()
     op <- '=='
     if( grepl("^[=<>]", str_trim(x)) ){
@@ -60,10 +80,10 @@ str_out <- function(x, max=3L, quote=is.character(x), use.names=FALSE, sep=", ",
 			if( isTRUE(quote) ) "'"
 			else if( is.character(quote) ) quote
 	if( !is.null(quote) ) x <- unlist(lapply(x, function(v) paste(quote,v,quote, sep='')))
-	else if( all(sapply(x, isInteger)) ) x <- unlist(lapply(x, function(v) str_c(v,'L')))
+	else if( all(sapply(x, isInteger)) ) x <- unlist(lapply(x, function(v) paste0(v,'L')))
 	# add names if necessary
 	if( use.names && !is.null(names(x)) ){
-		nm <- str_c(names(x),'=')
+		nm <- paste0(names(x),'=')
 		x <- paste(ifelse(nm=='=','',nm), x, sep='')
 	}
 	# insert suffix

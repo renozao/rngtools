@@ -11,7 +11,6 @@
 #' @name rngtools
 #' @docType package
 #' 
-#' @import stringr
 #' @import digest
 #' @import methods
 #' 

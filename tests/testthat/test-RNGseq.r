@@ -5,8 +5,6 @@
 
 context("RNGseq: RNG streams")
 
-library(stringr)
-
 test_that('RNGseq_seed', {
 	
 	# actual testing function

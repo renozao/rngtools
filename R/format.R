@@ -59,7 +59,7 @@ RNGstr <- function(object, n=7L, ...){
 	if( is.null(seed) ) 'NULL'
 	else if( is.numeric(seed) ){
 		if( length(seed) > n ){
-			paste(str_out(seed, 3L),  str_c('[', digest(seed), ']'))
+			paste(str_out(seed, 3L),  paste0('[', digest(seed), ']'))
 		}else{
 			str_out(seed, Inf)
 		}

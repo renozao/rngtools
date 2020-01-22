@@ -8,7 +8,6 @@
 context("Formatting functions")
 
 library(stringr)
-library(pkgmaker)
 library(utils)
 
 # RUnit-testthat bridge 

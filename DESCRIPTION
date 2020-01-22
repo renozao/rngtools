@@ -2,7 +2,7 @@ Package: rngtools
 Authors@R: 
   c(person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre")),
     person("Max", "Kuhn", role = "ctb"))
-Version: 1.4
+Version: 1.4.1
 License: GPL-3
 Title: Utility Functions for Working with Random Number Generators
 Description: Provides a set of functions for working with
@@ -16,8 +16,7 @@ BugReports: http://github.com/renozao/rngtools/issues
 Encoding: UTF-8
 Depends:
     R (>= 3.2.0),
-    methods,
-    pkgmaker (>= 0.20)
+    methods
 Imports:
     stringr,
     digest,
@@ -28,10 +27,5 @@ Suggests:
     covr,
     RUnit,
     testthat
-Collate:
-    'rngtools-package.r'
-    'format.R'
-    'RNG.R'
-    'RNGseq.R'
-Roxygen: list(markdown = TRUE, roclets = c('collate', 'namespace', 'roclets::rd2_roclet') )
-RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2

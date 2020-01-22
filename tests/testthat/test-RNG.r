@@ -6,7 +6,6 @@
 context("Get/Set RNG")
 
 library(stringr)
-library(pkgmaker)
 
 test_that('getRNG', {
 

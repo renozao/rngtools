@@ -311,20 +311,25 @@ setGeneric('.getRNG', function(object, ...) standardGeneric('.getRNG') )
 #' It returns \code{NULL} if no RNG data was found.
 setMethod('.getRNG', 'ANY',
 	function(object, ...){
-		.getRNGattribute(object)
+	  if( missing(object) ) .get_Random.seed() # safe-guard
+		else .getRNGattribute(object)
 	}
 )
+
+.get_Random.seed <- function(){
+  # return current value of .Random.seed
+  # ensuring it exists first 
+  if( !exists('.Random.seed', envir = .GlobalEnv) ) 
+    sample(NA)
+  
+  return( get('.Random.seed', envir = .GlobalEnv) )
+  
+}
 #' @describeIn .getRNG Returns the current RNG settings.
 setMethod('.getRNG', 'missing',
 	function(object){
-		
-		# return current value of .Random.seed
-		# ensuring it exists first 
-		if( !exists('.Random.seed', envir = .GlobalEnv) ) 
-			sample(NA)
-		
-		return( get('.Random.seed', envir = .GlobalEnv) )
-		
+	  .get_Random.seed()
+	  
 	}
 )
 
@@ -588,7 +593,20 @@ setMethod('.setRNG', 'numeric',
 					, .collapse(seed, n=5), "]: ", err$message, '.'
 					, call.=FALSE)
 			    }
-            )
+			, warning = function(w){
+			  stop("setRNG - Invalid numeric seed ["
+			       , .collapse(seed, n=5), "]: ", w$message, '.'
+			       , call.=FALSE)
+			}
+			, finally = {
+			  if( !identical(seed[1L], RNGseed()[1L]) ){
+			    msg <- "detected that the RNG kind would change after frist draw."
+			    stop("setRNG - Invalid numeric seed ["
+			         , .collapse(seed, n=5), "]: ", msg, '.'
+			         , call.=FALSE)
+			  }
+			})
+			# re-force setting the seed if no error happened
 			RNGseed(seed)			
 		}
 	}

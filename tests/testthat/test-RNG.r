@@ -120,12 +120,13 @@ test_that('setRNG', {
     if( testRversion('> 3.0.1') ){
         oldRNG <- getRNG()
         expect_warning(setRNG(1234L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
-                        , info = "Invalid integer kind: Warning only if check = FALSE")
-        expect_identical(1234L, getRNG(), "RNG has new invalid integer value")
-        setRNG(oldRNG)
+                        , info = "Invalid integer kind: Warning if check = FALSE")
+        expect_identical(oldRNG, getRNG(), "RNG keep old value")
+        RNGrecovery()
+        oldRNG <- getRNG()
         expect_warning(setRNG(123L, check = FALSE), "\\.Random\\.seed.* is not .* valid"
-                        , info = "Invalid kind: Warning only if check = FALSE")
-        expect_identical(123L, getRNG(), "RNG has new invalid RNG kind")
+                        , info = "Invalid kind: Warning if check = FALSE")
+        expect_identical(oldRNG, getRNG(), "RNG keep old value")
                                                 
     }
 	

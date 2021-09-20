@@ -491,20 +491,23 @@ setRNG <- function(object, ..., verbose=FALSE, check = TRUE){
 	})
 
 	# call S4 method on object
-    # check validity of the seed
-	tryCatch(.setRNG(object, ...)
+	# check validity of the seed
+	invalid_seed <- NULL
+	withCallingHandlers(.setRNG(object, ...)
             , warning = function(err){
-                if( check && testRversion('> 3.0.1') 
-                        && grepl("\\.Random\\.seed.* is not a valid", err$message) ){
+              invalid_seed <<- grepl("\\.Random\\.seed.* is not a valid", err$message)
+                if( check && testRversion('> 3.0.1') && invalid_seed ){
                     stop("setRNG - Invalid RNG kind [", str_out(object), "]: "
-							, err$message, '.'
-							, call.=FALSE)
-                }else{
-                    warning(err)
+                         , err$message, '.'
+                         , call.=FALSE)
+                }else if( !invalid_seed ){ # if the seed is not invalid then we show the warning and continue
+                  warning(err)
+                  invokeRestart("muffleWarning")
+                  
                 }
-            } 
+            }
     )
-	
+	if( isTRUE(invalid_seed) ) return()
 	# cancel RNG restoration
 	on.exit()
 	if( verbose ) showRNG()			

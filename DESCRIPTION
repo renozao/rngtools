@@ -11,8 +11,8 @@ Description: Provides a set of functions for working with
     that are embedded into objects for reproducibility.
     Notably, convenient default methods greatly facilitate the way current
     RNG settings can be changed.
-URL: https://renozao.github.io/rngtools
-BugReports: http://github.com/renozao/rngtools/issues
+URL: https://renozao.github.io/rngtools/
+BugReports: https://github.com/renozao/rngtools/issues
 Encoding: UTF-8
 Depends:
     R (>= 3.2.0),

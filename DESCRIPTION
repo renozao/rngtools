@@ -2,7 +2,7 @@ Package: rngtools
 Authors@R: 
   c(person("Renaud", "Gaujoux", email = "renozao@protonmail.com", role = c("aut", "cre")),
     person("Max", "Kuhn", role = "ctb"))
-Version: 1.5.0.9000
+Version: 1.5.0.91
 License: GPL-3
 Title: Utility Functions for Working with Random Number Generators
 Description: Provides a set of functions for working with

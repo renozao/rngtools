@@ -52,3 +52,11 @@
 #' showRNG()
 #' 
 NULL
+
+.onLoad <- function(libname, pkgname){
+  # initialize RNG seed if not defined yet
+  rs <- get0(".Random.seed", .GlobalEnv)
+  if( is.null(rs) ) RNGkind_default()
+  
+  
+}

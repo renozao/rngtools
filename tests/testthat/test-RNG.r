@@ -132,3 +132,18 @@ test_that('setRNG', {
 	
 })
 
+
+test_that('.Random.seed init', {
+  cmd <- 'Rscript -e "RNGkind(); rngtools::RNGseq(2, seed=200); RNGkind();"'
+  out <- capture.output(system(cmd, intern = TRUE))
+  expect_true(!any(grepl("Ecuyer", out)))
+  
+  tmpf <- tempfile(tmpdir = getwd())
+  on.exit( unlink(tmpf) )
+  cmd <- sprintf('Rscript -e "runif(1); s <- .Random.seed; RNGkind(); rngtools::RNGseq(2, seed=200); RNGkind(); saveRDS(identical(s, .Random.seed), \\"%s\\")"',
+                 tmpf)
+  out <- capture.output(system(cmd, intern = TRUE))
+  expect_true(readRDS(tmpf))
+  
+})
+

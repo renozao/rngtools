@@ -73,7 +73,6 @@ NULL
 .onLoad <- function(libname, pkgname){
   # initialize RNG seed if not defined yet
   rs <- get0(".Random.seed", .GlobalEnv)
-  if( is.null(rs) ) RNGkind_default()
-  
+  if( is.null(rs) ) do.call(base::RNGkind, as.list(base::RNGkind()))
   
 }

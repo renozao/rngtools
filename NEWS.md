@@ -2,6 +2,7 @@
 
   * Add NEWS file (Issue #9)
   * Fix behaviour when .Random.seed is not set on the first call to `rngtools::setRNG()` (Issue #7)
+  * Add a LICENSE file (Issue #)
 
 # Version 1.5.2
 
